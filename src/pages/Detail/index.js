@@ -55,7 +55,7 @@ export default function Details( props ){
                     <MaterialCommunityIcons name="cart" color={'#fff'} size={25} onPress={() => adicionarAoCarrinho()} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.saleButton} onPress={() => props.navigation.navigate('sale')}>
+                <TouchableOpacity style={styles.saleButton} onPress={() => props.navigation.navigate('payment')}>
                     <Text style={styles.textButtomSale}>Comprar agora</Text>
                 </TouchableOpacity>
             </View>

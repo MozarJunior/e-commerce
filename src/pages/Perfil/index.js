@@ -3,21 +3,30 @@ import { SafeAreaView, View, Text, TouchableOpacity } from "react-native";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from "./style";
 import { db } from "../../../components/config";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 
 export default function Perfil( {navigation} ){
     const [usuario_id, setUsuario] = useState('0qRBEeuugD5w2rKRhU8T');
     const [endereco, setEndereco] = useState([]);
 
-    useEffect(() => {
-        getDocs(collection(db, 'endereco')).then(docSnap => {
-            ender = []
-            docSnap.forEach((doc) => {
-                if(doc.data().usuario_id === usuario_id){
-                    endereco.push({...doc.data(), id: doc.id})
-                }
+    const consulta = async () => {
+        try{
+            const tabelaRef = collection(db, 'endereco');
+            const q = query(tabelaRef, where('usuario_id', '==', usuario_id));
+
+            // Execute a consulta
+            const snapshot = await getDocs(q);
+    
+            snapshot.forEach((doc) => {
+                setEndereco(doc.data());
             })
-        });
+        }catch(error){
+            console.error('Erro ao consultar coleção: ', error)
+        }
+    }
+
+    useEffect(() => {
+        consulta();
     }, [])
 
     return (

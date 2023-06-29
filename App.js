@@ -15,9 +15,11 @@ import Perfil from './src/pages/Perfil';
 import RegisterProduct from './src/pages/RegisterProduct';
 import RegisterEndereco from './src/pages/RegisterEndereco';
 import Details from './src/pages/Detail';
-import Sale from './src/pages/Sale';
 import Cart from './src/pages/Cart';
 import Pedidos from './src/pages/Pedidos';
+import Payment from './src/pages/Payment';
+import PaymentCard from './src/pages/Payment/card';
+import PaymentPix from './src/pages/Payment/pix';
 
 
 export default function App() {
@@ -112,11 +114,51 @@ export default function App() {
           }}
         />
         <Stack.Screen 
-          name="sale" 
-          component={Sale}
+          name="payment" 
+          component={Payment}
           options={{
             headerShown: true,
-            title: 'Finalizar Compra',
+            title: 'Finalizar compra',
+            headerStyle: {
+              height: '30%',
+              width: '100%',
+              backgroundColor: '#00aaff',
+              border: '0.01px',
+              borderBottomEndRadius: 80,
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              color: '#fff',
+              fontWeight: 'bold',
+            },
+          }}
+        />
+        <Stack.Screen 
+          name="paymentCard" 
+          component={PaymentCard}
+          options={{
+            headerShown: true,
+            title: 'Finalizar compra',
+            headerStyle: {
+              height: '30%',
+              width: '100%',
+              backgroundColor: '#00aaff',
+              border: '0.01px',
+              borderBottomEndRadius: 80,
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              color: '#fff',
+              fontWeight: 'bold',
+            },
+          }}
+        />
+        <Stack.Screen 
+          name="paymentPix" 
+          component={PaymentPix}
+          options={{
+            headerShown: true,
+            title: 'Finalizar a compra',
             headerStyle: {
               height: '30%',
               width: '100%',
