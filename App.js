@@ -23,7 +23,7 @@ import Pedidos from './src/pages/Pedidos';
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='registerEndereco'>
+      <Stack.Navigator initialRouteName='MyTab'>
         <Stack.Screen 
           name="login" 
           component={Login}

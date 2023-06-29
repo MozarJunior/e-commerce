@@ -26,7 +26,7 @@ export default function RegisterEndereco(){
             console.log("Dados registrados");
         }).catch((error) => {
             console.log(error);
-    })
+        })
     }
 
     return (

@@ -1,9 +1,25 @@
-import react from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView, View, Text, TouchableOpacity } from "react-native";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from "./style";
+import { db } from "../../../components/config";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 
 export default function Perfil( {navigation} ){
+    const [usuario_id, setUsuario] = useState('0qRBEeuugD5w2rKRhU8T');
+    const [endereco, setEndereco] = useState([]);
+
+    useEffect(() => {
+        getDocs(collection(db, 'endereco')).then(docSnap => {
+            ender = []
+            docSnap.forEach((doc) => {
+                if(doc.data().usuario_id === usuario_id){
+                    endereco.push({...doc.data(), id: doc.id})
+                }
+            })
+        });
+    }, [])
+
     return (
         <SafeAreaView style={styles.container}>
 
@@ -25,11 +41,8 @@ export default function Perfil( {navigation} ){
                     <Text style={styles.enderecoHeaderText}>Endereço de Entrega</Text>
                 </View>
                 <View style={styles.enderecoBody}>
-                    <Text style={styles.enderecoBodyText}>Rua: Antônio joaquim Neto</Text>
-                    <Text style={styles.enderecoBodyText}>Bairro: Centro   |   Numero: 01</Text>
-                    <Text style={styles.enderecoBodyText}>Cep: 56190-000</Text>
-                    <Text style={styles.enderecoBodyText}>Cidade: Terra Nova</Text>
-                    <Text style={styles.enderecoBodyText}>Estado: Pernambuco</Text>
+                    <Text style={styles.enderecoBodyText}>Rua: { endereco.logradouro }</Text>
+                    <Text style={styles.enderecoBodyText}>Bairro: {endereco.bairro}   |   Numero: { endereco.numero }</Text>
                 </View>
             </View>
 

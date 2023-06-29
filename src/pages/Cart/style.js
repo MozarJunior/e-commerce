@@ -36,11 +36,17 @@ const styles = StyleSheet.create({
     bodyProduct: {
         flex: 1,
         width: '100%',
-        alignItems: 'center',
+        // alignItems: 'center',
+    },
+
+    bodyFlat: {
+        flex: 1,
+        height: '100%',
+        width: '100%',
     },
 
     cardProduct: {
-        height: '20%',
+        height: 100,
         width: '90%',
         marginVertical: 5,
         backgroundColor: '#fff',

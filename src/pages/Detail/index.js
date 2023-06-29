@@ -1,13 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Text, Image, View, SafeAreaView, TouchableOpacity } from 'react-native';
 import styles from "./style";
 import lapis from '../../assets/img/lapis.jpg';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-export default function Details( {navigation} ){
+import { addDoc, collection, doc, getDoc } from "firebase/firestore";
+import { db } from "../../../components/config";
+export default function Details( props ){
+
+    const [produto_id, setProduto_id] = useState(props.route.params.produto_id);
+    const [produto, setProduto] = useState([]);
+    const [usuario_id, setUsuario_id] = useState('0qRBEeuugD5w2rKRhU8T');
 
     async function adicionarAoCarrinho(){
-        alert('Adicionando item ao carrinho');
+        try {
+            addDoc(collection(db, 'carrinho'), {
+                usuario_id: usuario_id,
+                produto_id: produto_id
+            }).then(() => {
+                console.log("Dados registrados");
+            }).catch((error) => {
+                console.log("algo deu errado");
+            })
+        } catch (error) {
+            console.error("Item já adicionado")
+        }
     }
+    useEffect(() => {
+        getDoc(doc(db, 'produto', produto_id)).then(docData => {
+            let pro = []
+            
+            if(docData.exists()){
+                pro = docData.data();
+                setProduto(pro);
+            }else{
+                console.log('Não tem produto');
+            }
+        })
+    }, [])
 
     return (
         <SafeAreaView style={styles.container}>
@@ -16,9 +45,9 @@ export default function Details( {navigation} ){
             </View>
 
             <View style={styles.sectionProduto}>
-                <Text style={styles.nomeProduto}>Nome do produto do exemplo clicado</Text>
-                <Text style={styles.descricaoProduto}>Aqui está a dsscrição do produto que está sendo apresentado</Text>
-                <Text style={styles.precoProduto}>1.00 R$</Text>
+                <Text style={styles.nomeProduto}>{ produto.nome }</Text>
+                <Text style={styles.descricaoProduto}>{ produto.descricao }</Text>
+                <Text style={styles.precoProduto}>{ produto.preco } R$</Text>
             </View>
 
             <View style={styles.sectionSale}>
@@ -26,7 +55,7 @@ export default function Details( {navigation} ){
                     <MaterialCommunityIcons name="cart" color={'#fff'} size={25} onPress={() => adicionarAoCarrinho()} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.saleButton} onPress={() => navigation.navigate('sale')}>
+                <TouchableOpacity style={styles.saleButton} onPress={() => props.navigation.navigate('sale')}>
                     <Text style={styles.textButtomSale}>Comprar agora</Text>
                 </TouchableOpacity>
             </View>
