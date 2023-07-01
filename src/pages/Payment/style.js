@@ -1,6 +1,12 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
+    containerPix: {
+        flex: 1,
+        padding: 20,
+        // justifyContent: 'center',
+        // alignItems: 'center',
+    },
     container: {
         flex: 1,
         padding: 20,
@@ -14,15 +20,15 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 20,
     },
-        form: {
+    form: {
         width: '100%',
         alignItems: 'center',
     },
-        formGroup: {
+    formGroup: {
         width: '100%',
         marginBottom: 20,
     },
-        label: {
+    label: {
         fontSize: 16,
         fontWeight: 'bold',
         marginBottom: 5,
@@ -62,6 +68,12 @@ const styles = StyleSheet.create({
     image: {
         width: 150,
         height: 100,
+    },
+
+    imagem: {
+        height: 310,
+        width: 325,
+        marginBottom: 20,
     },
 });
 

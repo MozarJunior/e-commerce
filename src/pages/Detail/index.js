@@ -41,7 +41,7 @@ export default function Details( props ){
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.sectionImage}>
-                <Image style={styles.image} source={lapis}/>
+                <Image style={styles.image} source={{ uri: produto.imagem }}/>
             </View>
 
             <View style={styles.sectionProduto}>
@@ -55,7 +55,11 @@ export default function Details( props ){
                     <MaterialCommunityIcons name="cart" color={'#fff'} size={25} onPress={() => adicionarAoCarrinho()} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.saleButton} onPress={() => props.navigation.navigate('payment')}>
+                <TouchableOpacity style={styles.saleButton} onPress={() => props.navigation.navigate('payment', {
+                    produto_id: produto.id, 
+                    usuario_id: usuario_id,
+                    preco: produto.preco
+                })}>
                     <Text style={styles.textButtomSale}>Comprar agora</Text>
                 </TouchableOpacity>
             </View>

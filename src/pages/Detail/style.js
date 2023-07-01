@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     },
     //Seção da image m
     sectionImage: {
-        height: '45%',
+        height: '50%',
         width: '100%',
     },
 
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
 
     //Inicion da seção de descrição
     sectionProduto: {
-        height: '42%',
+        height: '40%',
         width: '100%',
         paddingHorizontal: 10,
         paddingVertical: 15,
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
 
     //Inicio da seção de pagamento e carrinho
     sectionSale: {
-        height: '13%',
+        height: '10%',
         width: '100%',
         backgroundColor: '#fff',
         flexDirection: 'row',

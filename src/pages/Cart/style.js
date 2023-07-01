@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     },
 
     cardProduct: {
-        height: 100,
+        height: 110,
         width: '90%',
         marginVertical: 5,
         backgroundColor: '#fff',
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
 
     cardBody: {
         height: '100%',
-        width: '70%',
+        width: '80%',
         alignItems: "center",
         justifyContent: 'center',
         backgroundColor: '#fff',
@@ -66,13 +66,13 @@ const styles = StyleSheet.create({
 
     cardImage: {
         height: '100%',
-        width: '30%',
+        width: '35%',
         borderRadius: 10,
     },
 
     cardNameProduto: {
-        fontSize: 14,
-        fontWeight: 400,
+        fontSize: 16,
+        fontWeight: 'bold',
         justifyContent: 'flex-start',
         alignContent: 'flex-start',
         paddingTop: 5,
@@ -81,24 +81,26 @@ const styles = StyleSheet.create({
     },
 
     sectionPreco:{
-        flexDirection: 'row',
-        height: '40%',
+        flexDirection: 'column',
+        height: '50%',
         width: '100%',
-        alignItems: 'baseline',
-        justifyContent: 'space-around',
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+        paddingHorizontal: 10,
     },
 
     cardPrecoProduto: {
-        fontSize: 15,
-        fontWeight: 500,
-        color: '#00dd00',
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#00aaff',
         paddingTop: 5,
     },
     
     cardQuantProduto: {
-        fontSize: 13,
-        fontWeight: 400,
+        fontSize: 14,
+        fontWeight: 500,
         paddingTop: 5,
+        color: '#000',
     },
 });
 

@@ -46,7 +46,7 @@ export default function Cart( props ){
 
     useEffect(() => {
         consultaEs();
-    })
+    }, [])
 
     return (
         <SafeAreaView style={styles.container}>
@@ -63,12 +63,12 @@ export default function Cart( props ){
                             <Pressable style={styles.cardProduct} onPress={() => props.navigation.navigate('details', {
                                 produto_id: item.item.id
                             })}>
-                                <Image style={styles.cardImage} source={lapis}/>
+                                <Image style={styles.cardImage} source={{ uri: item.item.imagem }}/>
                                 <View style={styles.cardBody}>
                                     <Text style={styles.cardNameProduto}>{ item.item.nome }</Text>
                                     <View style={styles.sectionPreco}>
                                         <Text style={styles.cardPrecoProduto}>{ item.item.preco } R$</Text>
-                                        <Text style={styles.cardQuantProduto}>{ item.item.quantidade } pcs</Text>
+                                        <Text style={styles.cardQuantProduto}>Restam {item.item.quantidade} pcs</Text>
                                     </View>
                                 </View>
                             </Pressable>
@@ -76,19 +76,6 @@ export default function Cart( props ){
                     } }
                 />
             </View>
-
-            {/* <View style={styles.bodyProduct}>
-                <Pressable style={styles.cardProduct} onPress={() => navigation.navigate('details')}>
-                    <Image style={styles.cardImage} source={lapis}/>
-                    <View style={styles.cardBody}>
-                        <Text style={styles.cardNameProduto}>Nome Produto</Text>
-                        <View style={styles.sectionPreco}>
-                            <Text style={styles.cardPrecoProduto}>1,00 R$</Text>
-                            <Text style={styles.cardQuantProduto}>100 pcs</Text>
-                        </View>
-                    </View>
-                </Pressable>
-            </View> */}
         </SafeAreaView>
     );
 }

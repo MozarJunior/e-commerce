@@ -4,10 +4,12 @@ import styles from "./style";
 import lapis from '../../assets/img/lapis.jpg'
 import { db, database } from "../../../components/config";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import FastImage from "react-native-fast-image";
 export default function Home( {navigation} ){
 
     const [produtos, setProdutos] = useState([]);
     const [usuario, setUsuario]  = useState([]);
+    // const [imagem, setImagem] = useState();
 
     useEffect (() => {
         getDocs(collection(db, 'produto')).then(docSnap => {
@@ -46,16 +48,18 @@ export default function Home( {navigation} ){
                     showsVerticalScrollIndicator={false}
                     data={produtos}
                     renderItem={( item ) => {
+                        // const imagem = require(item.item.imagem);
+                        // console.log(imagem)
                         return (
                         <Pressable style={styles.cardProduct} onPress={() => navigation.navigate('details', {
                             produto_id: item.item.id
                         })}>
-                            <Image style={styles.cardImage} source={lapis}/>
+                            <Image style={styles.cardImage} source={{ uri: item.item.imagem}}/>
                             <View style={styles.cardBody}>
                                 <Text style={styles.cardNameProduto}>{ item.item.nome }</Text>
                                 <View style={styles.sectionPreco}>
                                     <Text style={styles.cardPrecoProduto}>{item.item.preco} R$</Text>
-                                    <Text style={styles.cardQuantProduto}>{item.item.quantidade} pcs</Text>
+                                    <Text style={styles.cardQuantProduto}>Restam {item.item.quantidade} pcs</Text>
                                 </View>
                             </View>
                         </Pressable>
