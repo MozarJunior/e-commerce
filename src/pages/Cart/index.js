@@ -65,7 +65,7 @@ export default function Cart( props ){
                             })}>
                                 <Image style={styles.cardImage} source={{ uri: item.item.imagem }}/>
                                 <View style={styles.cardBody}>
-                                    <Text style={styles.cardNameProduto}>{ item.item.nome }</Text>
+                                    <Text style={styles.cardNameProduto}>{ item.item.nome.length > 30 ? item.item.nome.substring(0, 30).toUpperCase() + '...' : item.item.nome.toUpperCase() }</Text>
                                     <View style={styles.sectionPreco}>
                                         <Text style={styles.cardPrecoProduto}>{ item.item.preco } R$</Text>
                                         <Text style={styles.cardQuantProduto}>Restam {item.item.quantidade} pcs</Text>

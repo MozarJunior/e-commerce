@@ -47,15 +47,26 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
 
-    homeCardIcon: {
-        height: '35%',
-        width: '20%',
+    textCardIcon: {
+        fontSize: 11,
+    },
+
+    bodyCardIcon: {
+        height: '100%',
+        width: '100%',
         borderRadius: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 3,
         elevation: 3,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+
+    sectionCategoria: {
+        height: '35%',
+        width: '20%',
         alignItems: "center",
         justifyContent: "center",
     },

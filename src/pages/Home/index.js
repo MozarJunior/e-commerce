@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, Text, View, Image, ScrollView, Pressable, FlatList } from 'react-native';
+import { SafeAreaView, Text, View, Image, ScrollView, Pressable, FlatList, TouchableOpacity } from 'react-native';
 import styles from "./style";
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import lapis from '../../assets/img/lapis.jpg'
-import { db, database } from "../../../components/config";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
-import FastImage from "react-native-fast-image";
-import { ScrollViewComponent } from "react-native";
+import { db } from "../../../components/config";
+import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 export default function Home( {navigation} ){
 
     const [produtos, setProdutos] = useState([]);
@@ -24,6 +23,57 @@ export default function Home( {navigation} ){
 
             setProdutos(prod);
         });
+    }
+
+    const bookProdutos = async () => {
+        try {
+            const tabela = collection(db, 'produto');
+            const q = query(tabela, where('categoria', '==', 'livro'))
+            const snapShot = await getDocs(q);
+
+            const prod = []
+            snapShot.forEach((doc) => {
+                prod.push({...doc.data(), id: doc.id});
+            })
+
+            setProdutos(prod);
+        } catch (error) {
+            console.log("Erro ao consultar coleção: ", error)
+        }
+    }
+
+    const accessoryProdutos = async () => {
+        try {
+            const tabela = collection(db, 'produto');
+            const q = query(tabela, where('categoria', '==', 'acessorio'))
+            const snapShot = await getDocs(q);
+
+            const prod = []
+            snapShot.forEach((doc) => {
+                prod.push({...doc.data(), id: doc.id});
+            })
+
+            setProdutos(prod);
+        } catch (error) {
+            console.log("Erro ao consultar coleção: ", error)
+        }
+    }
+
+    const writeProdutos = async () => {
+        try {
+            const tabela = collection(db, 'produto');
+            const q = query(tabela, where('categoria', '==', 'escrita'))
+            const snapShot = await getDocs(q);
+
+            const prod = []
+            snapShot.forEach((doc) => {
+                prod.push({...doc.data(), id: doc.id});
+            })
+
+            setProdutos(prod);
+        } catch (error) {
+            console.log("Erro ao consultar coleção: ", error)
+        }
     }
 
     useEffect (() => {
@@ -51,26 +101,42 @@ export default function Home( {navigation} ){
             </View >
 
             <View style={styles.homeCard}>
-                <View style={styles.homeCardIcon}>
-                    <View style={styles.cardIcon}>
-                        <AntDesign name="home" color={"#00ff00"} size={40}/>
+
+                <View style={styles.sectionCategoria}>
+                    <View style={styles.bodyCardIcon}>
+                        <TouchableOpacity style={styles.cardIcon} onPress={() => generalProdutos()}>
+                            <AntDesign name="inbox" color={"#00ff00"} size={40}/>
+                        </TouchableOpacity>
                     </View>
+                    <Text style={styles.textCardIcon}>Geral</Text>
                 </View>
-                <View style={styles.homeCardIcon}>
-                    <View style={styles.cardIcon}>
-                        <EvilIcons name="pencil" color={"#00ff00"} size={40}/>
+                
+                <View style={styles.sectionCategoria}>
+                    <View style={styles.bodyCardIcon}>
+                        <TouchableOpacity style={styles.cardIcon} onPress={() => writeProdutos()}>
+                            <EvilIcons name="pencil" color={"#00ff00"} size={50}/>
+                        </TouchableOpacity>
                     </View>
+                    <Text style={styles.textCardIcon}>Escrita</Text>
                 </View>
-                <View style={styles.homeCardIcon}>
-                    <View style={styles.cardIcon}>
-                        <AntDesign name="book" color={"#00ff00"} size={40}/>
+                
+                <View style={styles.sectionCategoria}>
+                    <View style={styles.bodyCardIcon}>
+                        <TouchableOpacity style={styles.cardIcon} onPress={() => bookProdutos()}>
+                            <AntDesign name="book" color={"#00ff00"} size={40}/>
+                        </TouchableOpacity>
                     </View>
+                    <Text style={styles.textCardIcon}>Livros</Text>
                 </View>
-                <View style={styles.homeCardIcon}>
-                    <View style={styles.cardIcon}>
-                        <MaterialCommunityIcons name="sale" color={"#00ff00"} size={40}/>
+                <View style={styles.sectionCategoria}>
+                    <View style={styles.bodyCardIcon}>  
+                        <TouchableOpacity style={styles.cardIcon} onPress={() => accessoryProdutos()}>
+                            <SimpleLineIcons name="briefcase" color={"#00ff00"} size={40}/>
+                        </TouchableOpacity>
                     </View>
+                    <Text style={styles.textCardIcon}>Acessórios</Text>
                 </View>
+                
             </View>
             
             <View style={styles.bodyProduct}>
@@ -87,7 +153,7 @@ export default function Home( {navigation} ){
                         })}>
                             <Image style={styles.cardImage} source={{ uri: item.item.imagem}}/>
                             <View style={styles.cardBody}>
-                                <Text style={styles.cardNameProduto}>{ item.item.nome }</Text>
+                                <Text style={styles.cardNameProduto}>{ item.item.nome.length > 30 ? item.item.nome.substring(0, 30).toUpperCase() + '...' : item.item.nome.toUpperCase() }</Text>
                                 <View style={styles.sectionPreco}>
                                     <Text style={styles.cardPrecoProduto}>{item.item.preco} R$</Text>
                                     <Text style={styles.cardQuantProduto}>Restam {item.item.quantidade} pcs</Text>
