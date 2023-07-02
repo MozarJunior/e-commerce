@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, Text, View, Image, ScrollView, Pressable, FlatList } from 'react-native';
 import styles from "./style";
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import lapis from '../../assets/img/lapis.jpg'
 import { db, database } from "../../../components/config";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import FastImage from "react-native-fast-image";
+import { ScrollViewComponent } from "react-native";
 export default function Home( {navigation} ){
 
     const [produtos, setProdutos] = useState([]);
     const [usuario, setUsuario]  = useState([]);
     // const [imagem, setImagem] = useState();
 
-    useEffect (() => {
+    const generalProdutos = () => {
         getDocs(collection(db, 'produto')).then(docSnap => {
             let prod = [];
             docSnap.forEach((doc) => {
@@ -20,6 +24,10 @@ export default function Home( {navigation} ){
 
             setProdutos(prod);
         });
+    }
+
+    useEffect (() => {
+        generalProdutos();
     }, []);
 
     useEffect(() => {
@@ -41,6 +49,29 @@ export default function Home( {navigation} ){
             <View style={styles.homeHeader}>
                 <Text style={styles.homeHeaderText}>Olá, { usuario.nome }</Text>
             </View >
+
+            <View style={styles.homeCard}>
+                <View style={styles.homeCardIcon}>
+                    <View style={styles.cardIcon}>
+                        <AntDesign name="home" color={"#00ff00"} size={40}/>
+                    </View>
+                </View>
+                <View style={styles.homeCardIcon}>
+                    <View style={styles.cardIcon}>
+                        <EvilIcons name="pencil" color={"#00ff00"} size={40}/>
+                    </View>
+                </View>
+                <View style={styles.homeCardIcon}>
+                    <View style={styles.cardIcon}>
+                        <AntDesign name="book" color={"#00ff00"} size={40}/>
+                    </View>
+                </View>
+                <View style={styles.homeCardIcon}>
+                    <View style={styles.cardIcon}>
+                        <MaterialCommunityIcons name="sale" color={"#00ff00"} size={40}/>
+                    </View>
+                </View>
+            </View>
             
             <View style={styles.bodyProduct}>
                 <FlatList

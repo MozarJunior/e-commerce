@@ -23,6 +23,44 @@ const styles = StyleSheet.create({
         fontWeight: 500,
         paddingHorizontal: 20,
     },
+    //Fim do header
+
+    //Inicio do Card de categorias
+
+    homeCard: {
+        height: '30%',
+        width: '95%',
+        marginVertical: 20,
+        backgroundColor: '#fff',
+        alignItems: "center",
+        justifyContent: "space-around",
+        flexDirection: 'row',
+        borderRadius: 20,
+    },
+
+    cardIcon: {
+        height: '90%',
+        width: '90%',
+        borderRadius: 5,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: "center",
+    },
+
+    homeCardIcon: {
+        height: '35%',
+        width: '20%',
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 3,
+        elevation: 3,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+
+    //Fim do card de categorias
 
     homeBody: {
         minHeight: '85%',

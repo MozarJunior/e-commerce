@@ -1,10 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { Clipboard } from 'react-native-clipboard';
 import styles from './style';
 import chave from '../../assets/img/chave_pix.jpg'
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../../../components/config';
 export default function PaymentPix( props ) {
-    // Lógica de processamento do pagamento por PIX
     const [usuario_id, setUsuario_id] = useState(props.route.params.usuario_id);
     const [produto_id, setProduto_id] = useState(props.route.params.produto_id);
     const [preco, setPreco] = useState(props.route.params.preco)
