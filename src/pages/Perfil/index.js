@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, View, Text, TouchableOpacity } from "react-native";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 import styles from "./style";
 import { db } from "../../../components/config";
 import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 
 export default function Perfil( {navigation} ){
-    const [usuario_id, setUsuario] = useState('0qRBEeuugD5w2rKRhU8T');
+    const [usuario_id, setUsuario_id] = useState('0qRBEeuugD5w2rKRhU8T');
+    const [usuario, setUsuario] = useState([]);
     const [endereco, setEndereco] = useState([]);
+    const [endereco_ex, setEndereco_ex] = useState();
 
     const consulta = async () => {
         try{
@@ -27,7 +31,28 @@ export default function Perfil( {navigation} ){
 
     useEffect(() => {
         consulta();
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        getDoc(doc(db, 'user', usuario_id)).then(docData => {
+            let user = []
+            
+            if(docData.exists()){
+                user = docData.data();
+                setUsuario(user);
+            }else{
+                console.log('Não tem usuario');
+            }
+        })
+    }, []);
+
+    useEffect(() => {
+        if(endereco.length == 0){
+            setEndereco_ex(false)
+        }else{
+            setEndereco_ex(true)
+        }
+    })
 
     return (
         <SafeAreaView style={styles.container}>
@@ -40,18 +65,41 @@ export default function Perfil( {navigation} ){
                     </TouchableOpacity>
                 </View>
                 <View style={styles.headerBody}>
-                    <Text style={styles.headerBodyText}>Francisco Mozar</Text>
-                    <Text style={styles.headerBodyText}>mozarjunior97@gmail.com</Text>
+                    <Text style={styles.headerBodyText}>{usuario.nome}</Text>
+                    <Text style={styles.headerBodyText}>{usuario.email}</Text>
                 </View>
             </View>
 
             <View style={styles.secaoEndereco}>
                 <View style={styles.enderecoHeader}>
                     <Text style={styles.enderecoHeaderText}>Endereço de Entrega</Text>
+                    {endereco_ex == false? (
+                        <TouchableOpacity onPress={() => {navigation.navigate('registerEndereco', {
+                            usuario_id: usuario_id
+                        })}}>
+                            <Ionicons name="add-circle-outline" size={35} color={'#00aaff'}/> 
+                        </TouchableOpacity>
+                        ): 
+                        (
+                            <TouchableOpacity onPress={() => {navigation.navigate('updateEndereco', {
+                                usuario_id: usuario_id
+                            })}}>
+                                <Feather name="edit" size={30} color={'#00aaff'}/>
+                            </TouchableOpacity>
+                        )}
+                    
                 </View>
                 <View style={styles.enderecoBody}>
-                    <Text style={styles.enderecoBodyText}>Rua: { endereco.logradouro }</Text>
-                    <Text style={styles.enderecoBodyText}>Bairro: {endereco.bairro}   |   Numero: { endereco.numero }</Text>
+                    {endereco_ex == false? (
+                        <Text style={styles.enderecoBodyText}>Sem endereço cadastrado - Adicione um endereço</Text>
+                    ): 
+                    (
+                        <>
+                            <Text style={styles.enderecoBodyText}>Rua: { endereco.logradouro }</Text>
+                            <Text style={styles.enderecoBodyText}>Bairro: {endereco.bairro}   |   Numero: { endereco.numero }</Text>
+                            <Text style={styles.enderecoBodyText}>Cidade: Terra Nova | Estado: PE</Text>
+                        </>
+                    )}
                 </View>
             </View>
 
@@ -59,7 +107,9 @@ export default function Perfil( {navigation} ){
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Pedidos')}>
                     <Text style={styles.textButton}>Meus Pedidos</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('registerUpdate', {
+                    usuario_id: usuario_id,
+                })}>
                     <Text style={styles.textButton}>Dados Pessoais</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button}>

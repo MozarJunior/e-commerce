@@ -1,7 +1,7 @@
-import React from 'react';
-import { SafeAreaView, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, View, ScrollView } from 'react-native';
 import styles from './style';
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, query, setDoc, where } from "firebase/firestore";
 import { db } from '../../../components/config';
 //Imports para formulario
 import { useForm, Controller } from 'react-hook-form';
@@ -14,31 +14,47 @@ const schema = yup.object({
     numero: yup.string().required('Informe o número da sua casa')
 })
 
-export default function RegisterEndereco(){
+export default function UpdateEndereco( props ){
 
-    const { control, handleSubmit, formState: { errors } } = useForm({
+    const { control, handleSubmit, formState: { errors }, setValue } = useForm({
         resolver: yupResolver(schema)
     });
+    const [usuario_id, setUsuario_id] = useState(props.route.params.usuario_id)
+    const [endereco, setEndereco] = useState([]);
 
     const onSubmit = data => console.log(data);
 
-    async function cadastro(data){
-        addDoc(collection(db, "endereco"), {
-            logradouro: data.logradouro,
-            numero: data.numero,
-            bairro: data.bairro,
-            usuario_id: "0qRBEeuugD5w2rKRhU8T",
-        }).then(() => {
-            console.log("Dados registrados");
-        }).catch((error) => {
-            console.log(error);
-        })
+    const consulta = async () => {
+        try{
+            const tabelaRef = collection(db, 'endereco');
+            const q = query(tabelaRef, where('usuario_id', '==', usuario_id));
+
+
+            // Execute a consulta
+            const snapshot = await getDocs(q);
+    
+            snapshot.forEach((doc) => {
+                setEndereco({...doc.data(), id: doc.id});
+            })
+        }catch(error){
+            console.error('Erro ao consultar coleção: ', error)
+        }
     }
+
+    useEffect(() => {
+        consulta();
+    }, []);
+
+    useEffect(() => {
+        setValue('logradouro', endereco.logradouro);
+        setValue('bairro', endereco.bairro);
+        setValue('numero', endereco.numero);
+    });
 
     return (
         <KeyboardAvoidingView style={styles.container}>
             <ScrollView style={styles.form}>
-                <Text style={styles.title}>Cadastro de Endereço</Text>
+                <Text style={styles.title}>Atualização de Endereço</Text>
                 <View style={styles.formGroup}>
                     <Text style={styles.label}>Rua: </Text>
                     <Controller
@@ -99,11 +115,11 @@ export default function RegisterEndereco(){
                     />
                 </View>{/* Form Input */}
 
-                <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit(cadastro)}>
+                <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit(onSubmit)}>
                     <Text style={styles.submitBtnText}>Cadastrar</Text>
                 </TouchableOpacity>
             </ScrollView>{/* Form */}
-            
+        
         </KeyboardAvoidingView>
     );
 }

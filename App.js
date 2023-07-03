@@ -20,7 +20,8 @@ import Pedidos from './src/pages/Pedidos';
 import Payment from './src/pages/Payment';
 import PaymentCard from './src/pages/Payment/card';
 import PaymentPix from './src/pages/Payment/pix';
-
+import RegisterUpdate from './src/pages/Register/update';
+import UpdateEndereco from './src/pages/RegisterEndereco/update';
 
 export default function App() {
   return (
@@ -39,6 +40,26 @@ export default function App() {
           options={{
             headerShown: true,
             title: "Cadastro de Usuário",
+            headerStyle: {
+              height: '30%',
+              width: '100%',
+              backgroundColor: '#00aaff',
+              border: '0.01px',
+              borderBottomEndRadius: 80,
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              color: '#fff',
+              fontWeight: 'bold',
+            },
+          }}
+        />
+        <Stack.Screen 
+          name="registerUpdate" 
+          component={RegisterUpdate}
+          options={{
+            headerShown: true,
+            title: "Meus Dados",
             headerStyle: {
               height: '30%',
               width: '100%',
@@ -79,6 +100,26 @@ export default function App() {
           options={{
             headerShown: true,
             title: 'Cadastro de Endereço',
+            headerStyle: {
+              height: '30%',
+              width: '100%',
+              backgroundColor: '#00aaff',
+              border: '0.01px',
+              borderBottomEndRadius: 80,
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              color: '#fff',
+              fontWeight: 'bold',
+            },
+          }}
+        />
+        <Stack.Screen 
+          name="updateEndereco" 
+          component={UpdateEndereco}
+          options={{
+            headerShown: true,
+            title: 'Atualização de Endereço',
             headerStyle: {
               height: '30%',
               width: '100%',

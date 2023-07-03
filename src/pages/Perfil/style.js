@@ -68,11 +68,12 @@ const styles = StyleSheet.create({
     enderecoHeader: {
         height: '20%',
         width: '100%',
-        alignItems: 'flex-start',
-        justifyContent: 'center',
-        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 20,
         borderBottomWidth: 1, 
         borderBottomColor: '#00aaff',
+        flexDirection: "row",
     },
 
     enderecoHeaderText: {
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
     },
 
     enderecoBodyText: {
-        fontSize: 15,
+        fontSize: 19,
         marginVertical: 2,
     },
 

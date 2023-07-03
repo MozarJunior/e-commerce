@@ -105,7 +105,7 @@ export default function Home( {navigation} ){
                 <View style={styles.sectionCategoria}>
                     <View style={styles.bodyCardIcon}>
                         <TouchableOpacity style={styles.cardIcon} onPress={() => generalProdutos()}>
-                            <AntDesign name="inbox" color={"#00ff00"} size={40}/>
+                            <AntDesign name="inbox" color={"#00aaff"} size={40}/>
                         </TouchableOpacity>
                     </View>
                     <Text style={styles.textCardIcon}>Geral</Text>
@@ -114,7 +114,7 @@ export default function Home( {navigation} ){
                 <View style={styles.sectionCategoria}>
                     <View style={styles.bodyCardIcon}>
                         <TouchableOpacity style={styles.cardIcon} onPress={() => writeProdutos()}>
-                            <EvilIcons name="pencil" color={"#00ff00"} size={50}/>
+                            <EvilIcons name="pencil" color={"#00aaff"} size={50}/>
                         </TouchableOpacity>
                     </View>
                     <Text style={styles.textCardIcon}>Escrita</Text>
@@ -123,7 +123,7 @@ export default function Home( {navigation} ){
                 <View style={styles.sectionCategoria}>
                     <View style={styles.bodyCardIcon}>
                         <TouchableOpacity style={styles.cardIcon} onPress={() => bookProdutos()}>
-                            <AntDesign name="book" color={"#00ff00"} size={40}/>
+                            <AntDesign name="book" color={"#00aaff"} size={40}/>
                         </TouchableOpacity>
                     </View>
                     <Text style={styles.textCardIcon}>Livros</Text>
@@ -131,7 +131,7 @@ export default function Home( {navigation} ){
                 <View style={styles.sectionCategoria}>
                     <View style={styles.bodyCardIcon}>  
                         <TouchableOpacity style={styles.cardIcon} onPress={() => accessoryProdutos()}>
-                            <SimpleLineIcons name="briefcase" color={"#00ff00"} size={40}/>
+                            <SimpleLineIcons name="briefcase" color={"#00aaff"} size={40}/>
                         </TouchableOpacity>
                     </View>
                     <Text style={styles.textCardIcon}>Acessórios</Text>

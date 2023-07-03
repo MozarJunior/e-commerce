@@ -31,77 +31,72 @@ const styles = StyleSheet.create({
     },
     //Fim da seção logo
 
-    //Início da seção de formulario
-    sectionForm:{
-        flex: 1,
+    //Novo estilo de formulario
+
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        alignSelf: "center",
+        marginTop: '20%',
+    },
+    form: {
         width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
+        // alignItems: 'center',
     },
-    form:{
-        width: '100%',
-        height: '90%',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    formInput: {
-        width: '100%',
-        marginTop: 10,
-        marginBottom: 40,
-    },
-    textInput: {
-        marginLeft: '10%',
-    },
-    input: {
-        width: '80%',
-        paddingTop: 7,
-        paddingBottom: 7,
-        paddingRight: 7,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        fontSize: 17,
-        color: '#aaaaaa',
-        borderBottomWidth: 0.7,
-        borderBottomColor: '#dddddd',
-    },
-    messageError:{
-        color: '#aa0000',
+    formGroup: {
+        width: '90%',
+        marginBottom: 20,
         alignSelf: "center",
     },
-    button:{
-        width: '80%',
-        padding: 15,
-        alignItems: 'center',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        borderRadius: 10,
-        backgroundColor: '#0000ff',
+    label: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 5,
     },
-    textButton:{
-        color: '#ffffff',
-        fontSize: 15,
-        fontWeight: 600,
+    input: {
+        width: '100%',
+        padding: 10,
+        fontSize: 16,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 4,
     },
-    textForgot:{
-        marginLeft: '10%',
-        marginTop: 15,
-        marginBottom: 35,
-        color: '#00ddff',
-        fontSize: 14,
-        fontWeight: 500,
-        alignSelf: 'flex-start',
+    submitBtn: {
+        width: '90%',
+        padding: 10,
+        backgroundColor: '#00aaff',
+        borderRadius: 4,
+        marginTop: 20,
+        alignSelf: "center",
     },
-    textRegister:{
-        marginTop: 40,
-        fontSize: 13,
-        fontWeight: 300,
-        alignSelf: 'center',
+    submitBtnText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center',
     },
-    textRegisterLink:{
-        color: '#00ddff',
-        fontWeight: 600,
-    },
-    //Fim da seção do formulario
+
+    // button: {
+    //     // backgroundColor: '#',
+    //     padding: 5,
+    //     borderRadius: 4,
+    //     shadowColor: '#000',
+    //     shadowOffset: { width: 0, height: 2 },
+    //     shadowOpacity: 0.3,
+    //     shadowRadius: 3,
+    //     elevation: 3,
+    // },
+    // image: {
+    //     width: 150,
+    //     height: 100,
+    // },
+
+    // imagem: {
+    //     height: 310,
+    //     width: 325,
+    //     marginBottom: 20,
+    // },
 });
 
 export default styles;

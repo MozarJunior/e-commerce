@@ -1,10 +1,12 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { View, Text, TextInput, Button, TouchableOpacity, SafeAreaView, Keyboard, KeyboardAvoidingView, ScrollView } from "react-native";
 import styles from "./style";
 //Modulos para formulario
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../../components/config";
 
 const schema = yup.object({
     nome: yup.string().required("Informe seu nome"),
@@ -14,22 +16,51 @@ const schema = yup.object({
 });
 
 
-export default function Register(){
+export default function RegisterUpdate( props ){
+
+    const [usuario_id, setUsuario_id] = useState(props.route.params.usuario_id);
+    const [nome, setNome] = useState();
+    const [email, setEmail] = useState();
+    const [password, setPassword] = useState();
 
     const [message, setMessage] = useState(null);
 
-    const { control, handleSubmit, formState:{ errors } } = useForm({
+    const { control, handleSubmit, formState:{ errors }, setValue } = useForm({
         resolver: yupResolver(schema)
     });
-
-    async function Cadastro(data){
-        
+    
+    async function update(data){
+        console.log(data);
     }
+    
+    const onSubmit = (data) => {console.log(data)};
+    
+    const dados = async () => {
+        getDoc(doc(db, 'user', usuario_id)).then(docData => {
+            if(docData.exists){
+                setNome(docData.data().nome);
+                setEmail(docData.data().email);
+                setPassword(docData.data().senha);
+            }else{
+                console.log('Dado não existe');
+            }
+        })
+    }
+
+    useEffect(() => {
+        dados();
+    }, []);
+
+    useEffect(() => {
+        setValue('nome', nome);
+        setValue('email', email);
+    });
 
     return (
         <KeyboardAvoidingView style={styles.container}>
+
             <ScrollView style={styles.form}>
-            <Text style={styles.title}>Cadastro de Usuário</Text>
+                <Text style={styles.title}>Atualizar Meus Dados</Text>
                 {message && (
                     <Text>{message}</Text>
                 )}
@@ -42,7 +73,7 @@ export default function Register(){
                             <TextInput 
                                 style={[
                                     styles.input, {
-                                        borderBottomColor: errors.confirmPassword ? '#aa0000' : '#dddddd',
+                                        borderBottomColor: errors.nome ? '#aa0000' : '#dddddd',
                                     }
                                 ]} 
                                 placeholder="Digite seu Nome..." 
@@ -64,7 +95,7 @@ export default function Register(){
                             <TextInput 
                                 style={[
                                     styles.input, {
-                                        borderBottomColor: errors.confirmPassword ? '#aa0000' : '#dddddd',
+                                        borderBottomColor: errors.email ? '#aa0000' : '#dddddd',
                                     }
                                 ]}  
                                 placeholder="Digite seu Email..." 
@@ -86,7 +117,7 @@ export default function Register(){
                             <TextInput 
                                 style={[
                                     styles.input, {
-                                        borderBottomColor: errors.confirmPassword ? '#aa0000' : '#dddddd',
+                                        borderBottomColor: errors.password ? '#aa0000' : '#dddddd',
                                     }
                                 ]} 
                                 placeholder="Digite sua Senha..." 
@@ -122,11 +153,12 @@ export default function Register(){
                     />
                     { errors.confirmPassword && <Text style={styles.messageError}>{ errors.confirmPassword?.message }</Text> }
                 </View>{ /* Form Input */}
-
-                <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit(Cadastro)}>
-                    <Text style={styles.submitBtnText}>Cadastrar</Text>
+                <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit(update)}>
+                    <Text style={styles.submitBtnText}>Atualizar</Text>
                 </TouchableOpacity>
             </ScrollView>{ /* Form */}
+            
+            
         </KeyboardAvoidingView>
     );
 }
