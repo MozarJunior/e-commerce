@@ -12,10 +12,10 @@ const styles = StyleSheet.create({
         width: '100%',
     },
 
-    image: {
-        height: '100%',
-        width: '100%',
-    },
+    // image: {
+    //     height: '100%',
+    //     width: '100%',
+    // },
     //Fim da seção da imagem
 
     //Inicion da seção de descrição
@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
     descricaoProduto: {
         fontSize: 16,
         fontWeight: 400,
-        marginBottom: 10,
     },
     
     precoProduto: {
@@ -65,7 +64,7 @@ const styles = StyleSheet.create({
         marginLeft: 'auto',
         marginRight: 'auto',
         borderRadius: 10,
-        backgroundColor: '#0000ff',
+        backgroundColor: '#00aaff',
     },
 
     saleButton: {
@@ -77,7 +76,7 @@ const styles = StyleSheet.create({
         marginLeft: 'auto',
         marginRight: 'auto',
         borderRadius: 10,
-        backgroundColor: '#0000ff',
+        backgroundColor: '#52c41a',
     },
 
     textButtomSale: {
@@ -92,6 +91,39 @@ const styles = StyleSheet.create({
         fontWeight: 600,
     },
     //Fim da seção de pagamento e carrinho
+
+
+
+    //Novo layout para
+
+    container: {
+        flexGrow: 1,
+    },
+    image: {
+        width: '100%',
+        height: 350,
+        resizeMode: 'cover',
+        marginBottom: 16,
+    },
+    detailsContainer: {
+        marginBottom: 16,
+        paddingHorizontal: 10,
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 8,
+    },
+    price: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        color: 'green',
+        marginBottom: 8,
+    },
+    description: {
+        fontSize: 18,
+        marginBottom: 8,
+    },
 });
 
 export default styles;

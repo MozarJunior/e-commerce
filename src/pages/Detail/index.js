@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, Image, View, SafeAreaView, TouchableOpacity } from 'react-native';
+import { Text, Image, View, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native';
 import styles from "./style";
 import lapis from '../../assets/img/lapis.jpg';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -78,17 +78,21 @@ export default function Details( props ){
     });
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.sectionImage}>
-                <Image style={styles.image} source={{ uri: produto.imagem }}/>
-            </View>
-
-            <View style={styles.sectionProduto}>
-                <Text style={styles.nomeProduto}>{ produto.nome }</Text>
-                <Text style={styles.descricaoProduto}>{ produto.descricao }</Text>
-                <Text style={styles.precoProduto}>{ produto.preco } R$</Text>
-            </View>
-
+        <>
+            <ScrollView contentContainerStyle={styles.container}>
+                <Image
+                    source={{uri: produto.imagem}}
+                    style={styles.image}
+                />
+                <View style={styles.detailsContainer}>
+                    <Text style={styles.title}>{produto.nome}</Text>
+                    <Text style={styles.price}>{produto.preco} R$</Text>
+                    <Text style={styles.description}>
+                        {produto.descricao}
+                    </Text>
+                    {/* Outros detalhes do produto */}
+                </View>
+            </ScrollView>
             <View style={styles.sectionSale}>
                 <TouchableOpacity style={styles.cartButton}>
                     <MaterialCommunityIcons name="cart" color={'#fff'} size={25} onPress={() => adicionarAoCarrinho()} />
@@ -102,6 +106,22 @@ export default function Details( props ){
                     <Text style={styles.textButtomSale}>Comprar agora</Text>
                 </TouchableOpacity>
             </View>
-        </SafeAreaView>
+        </>
+        
+        
+        
+        // <SafeAreaView style={styles.container}>
+        //     <View style={styles.sectionImage}>
+        //         <Image style={styles.image} source={{ uri: produto.imagem }}/>
+        //     </View>
+
+        //     <View style={styles.sectionProduto}>
+        //         <Text style={styles.nomeProduto}>{ produto.nome }</Text>
+        //         <Text style={styles.descricaoProduto}>{ produto.descricao }</Text>
+        //         <Text style={styles.precoProduto}>{ produto.preco } R$</Text>
+        //     </View>
+
+             
+        // </SafeAreaView>
     );
 }
