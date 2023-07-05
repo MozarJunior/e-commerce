@@ -99,29 +99,12 @@ export default function Details( props ){
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.saleButton} onPress={() => props.navigation.navigate('payment', {
-                    produto_id: produto.id, 
+                    produto_id: produto_id, 
                     usuario_id: usuario_id,
-                    preco: produto.preco
                 })}>
                     <Text style={styles.textButtomSale}>Comprar agora</Text>
                 </TouchableOpacity>
             </View>
         </>
-        
-        
-        
-        // <SafeAreaView style={styles.container}>
-        //     <View style={styles.sectionImage}>
-        //         <Image style={styles.image} source={{ uri: produto.imagem }}/>
-        //     </View>
-
-        //     <View style={styles.sectionProduto}>
-        //         <Text style={styles.nomeProduto}>{ produto.nome }</Text>
-        //         <Text style={styles.descricaoProduto}>{ produto.descricao }</Text>
-        //         <Text style={styles.precoProduto}>{ produto.preco } R$</Text>
-        //     </View>
-
-             
-        // </SafeAreaView>
     );
 }

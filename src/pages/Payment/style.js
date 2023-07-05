@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     submitBtn: {
         width: '100%',
         padding: 10,
-        backgroundColor: '#4CAF50',
+        backgroundColor: '#00aaff',
         borderRadius: 4,
         marginTop: 20,
     },
@@ -55,9 +55,18 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
 
+    sectionBtn: {
+        height: '10%',
+        width: '100%',
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: '#fff',
+    },
+
     button: {
         // backgroundColor: '#',
-        padding: 5,
+        // padding: 10,
+        margin: 5,
         borderRadius: 4,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
@@ -77,9 +86,9 @@ const styles = StyleSheet.create({
     },
 
     sectionPagamento: {
-        height: '18%',
+        height: '70%',
         width: '100%',
-        backgroundColor: '#aaa',
+        // backgroundColor: '#aaa',
         flexDirection: 'row',
         alignItems: "center",
         justifyContent: "center",
@@ -92,7 +101,7 @@ const styles = StyleSheet.create({
         height: 110,
         width: '100%',
         marginVertical: 5,
-        backgroundColor: '#fff',
+        // backgroundColor: '#fff',
         borderRadius: 10,
         flexDirection: 'row',
     },
@@ -144,6 +153,45 @@ const styles = StyleSheet.create({
         fontWeight: 500,
         paddingTop: 5,
         color: '#000',
+    },
+
+    //Seção de endereco
+
+    secao: {
+        height: '35%',
+        width: '100%',
+        backgroundColor: '#ffffff',
+    },
+
+    header: {
+        height: '25%',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 20,
+        borderBottomWidth: 1, 
+        borderBottomColor: '#00aaff',
+        borderTopWidth: 1,
+        borderTopColor: '#00aaff',
+        flexDirection: "row",
+    },
+
+    HeaderText: {
+        color: '#00aaff',
+        fontSize: 17,
+        fontWeight: 400,
+    },
+
+    Body: {
+        width: '100%',
+        height: '75%',
+        padding: 20,
+        justifyContent: 'center',
+    },
+
+    BodyText: {
+        fontSize: 19,
+        marginVertical: 2,
     },
 });
 
