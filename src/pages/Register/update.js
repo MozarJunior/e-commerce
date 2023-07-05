@@ -22,7 +22,7 @@ export default function RegisterUpdate( props ){
     const [usuario_id, setUsuario_id] = useState(props.route.params.usuario_id);
     const [nome, setNome] = useState();
     const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
+    const [stateMessage, setStateMessage] = useState(false)
 
     const [message, setMessage] = useState(null);
 
@@ -37,7 +37,6 @@ export default function RegisterUpdate( props ){
             if(docData.exists){
                 setNome(docData.data().nome);
                 setEmail(docData.data().email);
-                setPassword(docData.data().senha);
             }else{
                 console.log('Dado não existe');
             }
@@ -48,20 +47,19 @@ export default function RegisterUpdate( props ){
         dados();
     }, []);
 
-    // useEffect(() => {
-    //     if(isFocused){
-    //         console.log('A pagina foi recarregada');
-    //         consulta();
-    //     }
-    // }, [isFocused]);
-
     async function updateUsuario(data) {
         updateDoc(doc(db, 'usuario', usuario_id), {
             nome: data.nome,
         }).then(() => {
             console.log('Dados atualizados')
             props.navigation.navigate('Perfil')
-        }).catch(error => 'Não foi possivel atualizar')
+        }).catch(error => {
+            setMessage('Não foi possivel Atualizar')
+            setStateMessage(false)
+            setTimeout(() => {
+                setMessage(null);
+            }, 3000)
+        })
     }
 
     useEffect(() => {
@@ -74,9 +72,15 @@ export default function RegisterUpdate( props ){
 
             <ScrollView style={styles.form}>
                 <Text style={styles.title}>Atualizar Meus Dados</Text>
-                {message && (
-                    <Text>{message}</Text>
-                )}
+                { message != null && (
+                    <View style={[
+                        styles.cardMessage, {
+                            backgroundColor: stateMessage? '#52c41a': '#ff6b6b'
+                        }
+                    ]}>
+                        <Text style={styles.message}>{message}</Text>
+                    </View>
+                )  }
                 <View style={styles.formGroup}>
                     <Text style={styles.label}>Nome: </Text>
                     <Controller

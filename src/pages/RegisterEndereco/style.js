@@ -146,6 +146,22 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
     },
+    cardMessage: {
+        height: '10%',
+        width: '90%',
+        border: '1px',
+        borderRadius: 5,
+        marginBottom: 10,
+        alignSelf: "center",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+
+    message: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#fff',
+    }
 });
 
 export default styles;

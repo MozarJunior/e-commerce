@@ -55,6 +55,13 @@ export default function Cart( props ){
         }
     }, [isFocused]);
 
+    useEffect(() => {
+        if(produtos.length == 0){
+            consultaEs();
+            console.log("pesquisando produtos")
+        }
+    })
+
     const auth = async () => {
         const auth = getAuth();
         const user = auth.currentUser;

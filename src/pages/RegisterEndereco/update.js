@@ -24,6 +24,8 @@ export default function UpdateEndereco( props ){
     });
     const [usuario_id, setUsuario_id] = useState(props.route.params.usuario_id)
     const [endereco, setEndereco] = useState([]);
+    const [message, setMessage] = useState(null);
+    const [stateMessage, setStateMessage] = useState(false)
 
     const onSubmit = data => console.log(data);
 
@@ -50,9 +52,19 @@ export default function UpdateEndereco( props ){
             numero: data.numero,
             bairro: data.bairro
         }).then(() => {
-            console.log('Dados atualizados')
+            setMessage('Cadastro Realizado');
+            setStateMessage(true)
+            setTimeout(() => {
+                setMessage(null);
+            }, 3000)
             props.navigation.navigate('Perfil')
-        }).catch(error => 'Não foi possivel atualizar')
+        }).catch(error => {
+            setMessage('Não foi possivel realizar cadastro')
+            setStateMessage(false)
+            setTimeout(() => {
+                setMessage(null);
+            }, 3000)
+        })
     }
 
     useEffect(() => {
@@ -76,6 +88,15 @@ export default function UpdateEndereco( props ){
         <KeyboardAvoidingView style={styles.container}>
             <ScrollView style={styles.form}>
                 <Text style={styles.title}>Atualização de Endereço</Text>
+                { message != null && (
+                    <View style={[
+                        styles.cardMessage, {
+                            backgroundColor: stateMessage? '#52c41a': '#ff6b6b'
+                        }
+                    ]}>
+                        <Text style={styles.message}>{message}</Text>
+                    </View>
+                )  }
                 <View style={styles.formGroup}>
                     <Text style={styles.label}>Rua: </Text>
                     <Controller

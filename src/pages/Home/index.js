@@ -95,6 +95,7 @@ export default function Home( {navigation} ){
 
     const authUser = async () => {
         try {
+            await auth();
             const tabela = collection(db, 'usuario');
             const q = query(tabela, where('user_id', '==', user_id))
             const snapShot = await getDocs(q);
@@ -107,7 +108,7 @@ export default function Home( {navigation} ){
                 })
             }
         } catch (error) {
-            console.log("Erro ao consultar coleção: ", error)
+            console.log("Erro ao consultar coleção usuario: ", error)
         }
     }
 

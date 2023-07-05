@@ -29,9 +29,15 @@ export default function Register(){
             createUsuario(data, value.user.uid);
             setMessage('Cadastro Realizado');
             setStateMessage(true)
+            setTimeout(() => {
+                setMessage(null);
+            }, 3000)
         }).catch(error => {
             setMessage('Não foi possivel realizar cadastro')
             setStateMessage(false)
+            setTimeout(() => {
+                setMessage(null);
+            }, 3000)
         });
     }
 

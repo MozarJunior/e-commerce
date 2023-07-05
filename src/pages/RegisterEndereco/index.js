@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, ScrollView } from 'react-native';
 import styles from './style';
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
@@ -16,6 +16,9 @@ const schema = yup.object({
 
 export default function RegisterEndereco( props ){
 
+    const [message, setMessage] = useState(null);
+    const [stateMessage, setStateMessage] = useState(false)
+
     const { control, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema)
     });
@@ -29,9 +32,17 @@ export default function RegisterEndereco( props ){
             bairro: data.bairro,
             usuario_id: props.route.params.usuario_id,
         }).then(() => {
-            console.log("Dados registrados");
+            setMessage('Cadastro Realizado');
+            setStateMessage(true)
+            setTimeout(() => {
+                setMessage(null);
+            }, 3000)
         }).catch((error) => {
-            console.log(error);
+            setMessage('Não foi possivel realizar cadastro')
+            setStateMessage(false)
+            setTimeout(() => {
+                setMessage(null);
+            }, 3000)
         })
     }
 
@@ -39,6 +50,15 @@ export default function RegisterEndereco( props ){
         <KeyboardAvoidingView style={styles.container}>
             <ScrollView style={styles.form}>
                 <Text style={styles.title}>Cadastro de Endereço</Text>
+                { message != null && (
+                    <View style={[
+                        styles.cardMessage, {
+                            backgroundColor: stateMessage? '#52c41a': '#ff6b6b'
+                        }
+                    ]}>
+                        <Text style={styles.message}>{message}</Text>
+                    </View>
+                )  }
                 <View style={styles.formGroup}>
                     <Text style={styles.label}>Rua: </Text>
                     <Controller

@@ -82,6 +82,13 @@ export default function Perfil( {navigation} ){
     }, [isFocused]);
 
     useEffect(() => {
+        if(endereco.length == 0){
+            consulta();
+            console.log('Pesquisando endereco')
+        }
+    })
+
+    useEffect(() => {
         authen();
         authUser();
     });
