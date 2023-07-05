@@ -8,10 +8,13 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import lapis from '../../assets/img/lapis.jpg'
 import { db } from "../../../components/config";
 import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 export default function Home( {navigation} ){
 
     const [produtos, setProdutos] = useState([]);
     const [usuario, setUsuario]  = useState([]);
+    const [usuario_id, setUsuario_id] = useState()
+    const [user_id, setUser_id] = useState()
     // const [imagem, setImagem] = useState();
 
     const generalProdutos = () => {
@@ -80,24 +83,44 @@ export default function Home( {navigation} ){
         generalProdutos();
     }, []);
 
-    useEffect(() => {
-        getDoc(doc(db, 'user', '0qRBEeuugD5w2rKRhU8T')).then(docData => {
-            let user = []
-            
-            if(docData.exists()){
-                user = docData.data();
-                setUsuario(user);
-            }else{
-                console.log('Não tem usuario');
+    const auth = async () => {
+        const auth = getAuth();
+        const user = auth.currentUser
+
+        if(user) {
+            const userUid = user.uid;
+            setUser_id(userUid);
+        }
+    }
+
+    const authUser = async () => {
+        try {
+            const tabela = collection(db, 'usuario');
+            const q = query(tabela, where('user_id', '==', user_id))
+            const snapShot = await getDocs(q);
+
+            const user = []
+            if(usuario.length < 1){
+                snapShot.forEach((doc) => {
+                    setUsuario(doc.data());
+                    setUsuario_id(doc.id);
+                })
             }
-        })
-    }, []);
+        } catch (error) {
+            console.log("Erro ao consultar coleção: ", error)
+        }
+    }
+
+    useEffect(() => {
+        auth();
+        authUser();
+    })
 
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.homeHeader}>
-                <Text style={styles.homeHeaderText}>Olá, { usuario.nome }</Text>
+                <Text style={styles.homeHeaderText} >Olá, { usuario.nome }</Text>
             </View >
 
             <View style={styles.homeCard}>

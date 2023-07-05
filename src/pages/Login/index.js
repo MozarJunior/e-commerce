@@ -12,6 +12,9 @@ const schema = yup.object({
     password: yup.string().min(6, 'Senha Invalida').required('Informe sua senha')
 });
 
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { auth } from "../../../components/config";
+
 export default function Login( {navigation} ){
 
     const [message, setMessage] = useState(null);
@@ -21,7 +24,11 @@ export default function Login( {navigation} ){
     });
 
     async function Login(data){
-        console.log('fazendo login');
+        await signInWithEmailAndPassword(auth, data.email, data.password).then(value => {
+            navigation.navigate('MyTab', {
+                user_id: value.user.uid
+            })
+        }).catch(error => setMessage('E-mail ou senha Incorretos'))
     }
 
     return (

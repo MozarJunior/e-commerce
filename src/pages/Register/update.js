@@ -5,19 +5,20 @@ import styles from "./style";
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../../components/config";
+import { useIsFocused } from "@react-navigation/native";
 
 const schema = yup.object({
     nome: yup.string().required("Informe seu nome"),
-    email: yup.string().email("E-mail invalido").required("Informe seu e-mail"),
-    password: yup.string().min(6, "A senha deve ter pelo menos 6 digitos").required("Informe sua senha"),
-    confirmPassword: yup.string().min(6, "A confirmação deve ter pelo menos 6 digitos").required("Informe a confirmação da senha")
+    // email: yup.string().email("E-mail invalido").required("Informe seu e-mail"),
+    // password: yup.string().min(6, "A senha deve ter pelo menos 6 digitos").required("Informe sua senha"),
+    // confirmPassword: yup.string().min(6, "A confirmação deve ter pelo menos 6 digitos").required("Informe a confirmação da senha")
 });
 
 
 export default function RegisterUpdate( props ){
-
+    const isFocused = useIsFocused();
     const [usuario_id, setUsuario_id] = useState(props.route.params.usuario_id);
     const [nome, setNome] = useState();
     const [email, setEmail] = useState();
@@ -29,14 +30,10 @@ export default function RegisterUpdate( props ){
         resolver: yupResolver(schema)
     });
     
-    async function update(data){
-        console.log(data);
-    }
-    
     const onSubmit = (data) => {console.log(data)};
     
     const dados = async () => {
-        getDoc(doc(db, 'user', usuario_id)).then(docData => {
+        getDoc(doc(db, 'usuario', usuario_id)).then(docData => {
             if(docData.exists){
                 setNome(docData.data().nome);
                 setEmail(docData.data().email);
@@ -50,6 +47,22 @@ export default function RegisterUpdate( props ){
     useEffect(() => {
         dados();
     }, []);
+
+    // useEffect(() => {
+    //     if(isFocused){
+    //         console.log('A pagina foi recarregada');
+    //         consulta();
+    //     }
+    // }, [isFocused]);
+
+    async function updateUsuario(data) {
+        updateDoc(doc(db, 'usuario', usuario_id), {
+            nome: data.nome,
+        }).then(() => {
+            console.log('Dados atualizados')
+            props.navigation.navigate('Perfil')
+        }).catch(error => 'Não foi possivel atualizar')
+    }
 
     useEffect(() => {
         setValue('nome', nome);
@@ -102,13 +115,14 @@ export default function RegisterUpdate( props ){
                                 onChangeText={onChange}
                                 onBlur={onBlur}
                                 value={value}
+                                editable={false}
                             />
                         )}
                     />
                     { errors.email && <Text style={styles.messageError}>{ errors.email?.message }</Text> }
                 </View>{ /* Form Input */}
 
-                <View style={styles.formGroup}>
+                {/* <View style={styles.formGroup}>
                     <Text style={styles.label}>Senha:</Text>
                     <Controller
                         control={control}
@@ -130,7 +144,7 @@ export default function RegisterUpdate( props ){
                     />
                     { errors.password && <Text style={styles.messageError}>{ errors.password?.message }</Text> }
                 </View>{ /* Form Input */}
-
+                { /*
                 <View style={styles.formGroup}>
                     <Text style={styles.label}>Confirme a senha:</Text>
                     <Controller
@@ -152,8 +166,8 @@ export default function RegisterUpdate( props ){
                         )}
                     />
                     { errors.confirmPassword && <Text style={styles.messageError}>{ errors.confirmPassword?.message }</Text> }
-                </View>{ /* Form Input */}
-                <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit(update)}>
+                </View>*/}
+                <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit(updateUsuario)}>
                     <Text style={styles.submitBtnText}>Atualizar</Text>
                 </TouchableOpacity>
             </ScrollView>{ /* Form */}

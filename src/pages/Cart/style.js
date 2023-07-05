@@ -60,8 +60,10 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: 'center',
         backgroundColor: '#fff',
-        alignItems: 'baseline',
+        alignItems: 'center',
         borderRadius: 10,
+        flexDirection: 'row',
+
     },
 
     cardImage: {
@@ -83,10 +85,23 @@ const styles = StyleSheet.create({
     sectionPreco:{
         flexDirection: 'column',
         height: '50%',
-        width: '100%',
+        width: '80%',
         alignItems: 'flex-start',
         justifyContent: 'center',
         paddingHorizontal: 10,
+    },
+
+    section01: {
+        width: '80%',
+        height: '100%',
+    },  
+
+    cardAction: {
+        backgroundColor: '#ff6b6b',
+        height: '100%',
+        width: '20%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 
     cardPrecoProduto: {

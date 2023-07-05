@@ -6,15 +6,22 @@ import Feather from 'react-native-vector-icons/Feather';
 import styles from "./style";
 import { db } from "../../../components/config";
 import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { getAuth, signOut } from "firebase/auth";
+import { auth } from "../../../components/config";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function Perfil( {navigation} ){
-    const [usuario_id, setUsuario_id] = useState('0qRBEeuugD5w2rKRhU8T');
-    const [usuario, setUsuario] = useState([]);
+    const isFocused = useIsFocused();
+    const [usuario, setUsuario]  = useState([]);
+    const [usuario_id, setUsuario_id] = useState('')
+    const [user_id, setUser_id] = useState()
     const [endereco, setEndereco] = useState([]);
     const [endereco_ex, setEndereco_ex] = useState();
 
     const consulta = async () => {
         try{
+            await authUser();
+            console.log(usuario_id)
             const tabelaRef = collection(db, 'endereco');
             const q = query(tabelaRef, where('usuario_id', '==', usuario_id));
 
@@ -30,29 +37,61 @@ export default function Perfil( {navigation} ){
     }
 
     useEffect(() => {
-        consulta();
-    }, []);
-
-    useEffect(() => {
-        getDoc(doc(db, 'user', usuario_id)).then(docData => {
-            let user = []
-            
-            if(docData.exists()){
-                user = docData.data();
-                setUsuario(user);
-            }else{
-                console.log('Não tem usuario');
-            }
-        })
-    }, []);
-
-    useEffect(() => {
         if(endereco.length == 0){
             setEndereco_ex(false)
         }else{
             setEndereco_ex(true)
         }
-    })
+    });
+
+    const authen = async () => {
+        const auth = getAuth();
+        const user = auth.currentUser
+
+        if(user) {
+            const userUid = user.uid;
+            setUser_id(userUid);
+            // console.log(user_id)
+        }
+    }
+
+    const authUser = async () => {
+        try {
+            await authen();
+            const tabela = collection(db, 'usuario');
+            const q = query(tabela, where('user_id', '==', user_id));
+            const snapShot = await getDocs(q);
+
+            const user = []
+            if(usuario.length < 1){
+                snapShot.forEach((doc) => {
+                    setUsuario(doc.data());
+                    setUsuario_id(doc.id);
+                })
+            }
+        } catch (error) {
+            console.log("Erro ao consultar coleção usuario: ", error)
+        }
+    }
+
+    useEffect(() => {
+        if(isFocused){
+            console.log('A pagina foi recarregada');
+            consulta();
+        }
+    }, [isFocused]);
+
+    useEffect(() => {
+        authen();
+        authUser();
+    });
+
+    const logout = async () => {
+        await signOut(auth).then(value => {
+            navigation.navigate('login');
+            getAuth().signOut();
+        }).catch(error => console.log('Não foi possivel sair'));
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -112,7 +151,7 @@ export default function Perfil( {navigation} ){
                 })}>
                     <Text style={styles.textButton}>Dados Pessoais</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button} onPress={() => logout()}>
                     <Text style={styles.textButton}>Sair</Text>
                 </TouchableOpacity>
             </View>

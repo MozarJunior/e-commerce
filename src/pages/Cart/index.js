@@ -1,24 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, Text, View, Pressable, Image, FlatList } from 'react-native';
+import { SafeAreaView, Text, View, Pressable, Image, FlatList, TouchableOpacity } from 'react-native';
 import styles from "./style";
-import lapis from '../../assets/img/lapis.jpg';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { db } from "../../../components/config";
-import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
-// import consulta from "./consulta";
-// import consultaEs from "./consulta";
+import { collection, deleteDoc, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { useIsFocused } from "@react-navigation/native";
+
 export default function Cart( props ){
 
+    const isFocused = useIsFocused();
+    
     const [produtos, setProdutos] = useState([]);
     const [produtos_cart, setProdutos_cart] = useState([]);
-
     const [carrinho, setCarrinho] = useState([]);
-    const [usuario_id, setUsuario] = useState('0qRBEeuugD5w2rKRhU8T');
-    const [count, setCount] = useState(0);
-
+    const [usuario, setUsuario]  = useState([]);
+    const [usuario_id, setUsuario_id] = useState('')
+    const [user_id, setUser_id] = useState('')
     const consultaEs = async () => {
         try {
+            await consultaUser();
             const tabela = collection(db, 'carrinho');
-            const q = query(tabela, where('usuario_id', '==', '0qRBEeuugD5w2rKRhU8T'))
+            const q = query(tabela, where('usuario_id', '==', usuario_id))
             const snapShot = await getDocs(q);
     
             const produtos = []
@@ -44,9 +47,44 @@ export default function Cart( props ){
         }
     }
 
+
     useEffect(() => {
-        consultaEs();
-    }, [])
+        if(isFocused){
+            console.log('A pagina foi recarregada');
+            consultaEs();
+        }
+    }, [isFocused]);
+
+    const auth = async () => {
+        const auth = getAuth();
+        const user = auth.currentUser;
+
+        if(user) {
+            const userUid = user.uid;
+            setUser_id(userUid);
+        }
+    }
+
+    const consultaUser = async () => {
+        try {
+            await auth();
+            getDocs(query(collection(db, 'usuario'), where('user_id', '==', user_id))).then(docSnap => {
+                docSnap.forEach(doc => {
+                    setUsuario(doc.data());
+                    setUsuario_id(doc.id)
+                })
+            })
+        } catch (error) {
+            console.log("Erro ao consultar coleção usuario: ", error)
+        }
+    }
+
+    async function deleteCart(id) {
+        console.log(id);
+        deleteDoc(query(collection(db, 'carrinho'), where('produto_id', '==', toString(id)))).then(value => {
+            console.log('Item deletado')
+        }).catch(error => console.error('Não foi possivel deletar'));
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -58,19 +96,25 @@ export default function Cart( props ){
                     style={styles.bodyFlat}
                     showsVerticalScrollIndicator={false}
                     data={produtos}
-                    renderItem={ (item) => {
+                    renderItem={(item) => {
                         return (
                             <Pressable style={styles.cardProduct} onPress={() => props.navigation.navigate('details', {
                                 produto_id: item.item.id
                             })}>
                                 <Image style={styles.cardImage} source={{ uri: item.item.imagem }}/>
                                 <View style={styles.cardBody}>
-                                    <Text style={styles.cardNameProduto}>{ item.item.nome.length > 30 ? item.item.nome.substring(0, 30).toUpperCase() + '...' : item.item.nome.toUpperCase() }</Text>
-                                    <View style={styles.sectionPreco}>
-                                        <Text style={styles.cardPrecoProduto}>{ item.item.preco } R$</Text>
-                                        <Text style={styles.cardQuantProduto}>Restam {item.item.quantidade} pcs</Text>
+                                    <View style={styles.section01}>
+                                        <Text style={styles.cardNameProduto}>{ item.item.nome.length > 20 ? item.item.nome.substring(0, 20).toUpperCase() + '...' : item.item.nome.toUpperCase() }</Text>
+                                        <View style={styles.sectionPreco}>
+                                            <Text style={styles.cardPrecoProduto}>{ item.item.preco } R$</Text>
+                                            <Text style={styles.cardQuantProduto}>Restam {item.item.quantidade} pcs</Text>
+                                        </View>
                                     </View>
+                                    <TouchableOpacity style={styles.cardAction} onPress={() => deleteCart(item.item.id)}>
+                                        <AntDesign name="delete" color={'#fff'} size={20}/>
+                                    </TouchableOpacity>
                                 </View>
+                                
                             </Pressable>
                         );
                     } }

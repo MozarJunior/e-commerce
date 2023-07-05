@@ -12,27 +12,58 @@ const schema = yup.object({
     password: yup.string().min(6, "A senha deve ter pelo menos 6 digitos").required("Informe sua senha"),
     confirmPassword: yup.string().min(6, "A confirmação deve ter pelo menos 6 digitos").required("Informe a confirmação da senha")
 });
-
-
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { auth, db } from "../../../components/config";
+import { addDoc, collection } from "firebase/firestore";
 export default function Register(){
 
     const [message, setMessage] = useState(null);
-
+    const [texto, setText] = useState(false);
+    const [stateMessage, setStateMessage] = useState(false)
     const { control, handleSubmit, formState:{ errors } } = useForm({
         resolver: yupResolver(schema)
     });
 
-    async function Cadastro(data){
-        
+    async function createUser(data){
+        await createUserWithEmailAndPassword(auth, data.email, data.password).then(value => {
+            createUsuario(data, value.user.uid);
+            setMessage('Cadastro Realizado');
+            setStateMessage(true)
+        }).catch(error => {
+            setMessage('Não foi possivel realizar cadastro')
+            setStateMessage(false)
+        });
+    }
+
+    async function createUsuario(data, user_id){
+        addDoc(collection(db, 'usuario'), {
+            nome: data.nome,
+            email: data.email,
+            password: data.password,
+            user_id: user_id
+        }).then(value => {
+            setMessage('Cadastro Realizado')
+        }).catch(error => {
+            setMessage('Não foi possivel realizar cadastro')
+        });
     }
 
     return (
         <KeyboardAvoidingView style={styles.container}>
             <ScrollView style={styles.form}>
-            <Text style={styles.title}>Cadastro de Usuário</Text>
-                {message && (
-                    <Text>{message}</Text>
-                )}
+            <Text style={styles.title} onPress={() => message()}>Cadastro de Usuário</Text>
+                
+                { message != null && (
+                    <View style={[
+                        styles.cardMessage, {
+                            backgroundColor: stateMessage? '#52c41a': '#ff6b6b'
+                        }
+                    ]}>
+                        <Text style={styles.message}>{message}</Text>
+                    </View>
+                )  }
+                
+
                 <View style={styles.formGroup}>
                     <Text style={styles.label}>Nome: </Text>
                     <Controller
@@ -123,7 +154,7 @@ export default function Register(){
                     { errors.confirmPassword && <Text style={styles.messageError}>{ errors.confirmPassword?.message }</Text> }
                 </View>{ /* Form Input */}
 
-                <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit(Cadastro)}>
+                <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit(createUser)}>
                     <Text style={styles.submitBtnText}>Cadastrar</Text>
                 </TouchableOpacity>
             </ScrollView>{ /* Form */}

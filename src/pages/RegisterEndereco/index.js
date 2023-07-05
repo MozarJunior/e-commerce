@@ -14,7 +14,7 @@ const schema = yup.object({
     numero: yup.string().required('Informe o número da sua casa')
 })
 
-export default function RegisterEndereco(){
+export default function RegisterEndereco( props ){
 
     const { control, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema)
@@ -27,7 +27,7 @@ export default function RegisterEndereco(){
             logradouro: data.logradouro,
             numero: data.numero,
             bairro: data.bairro,
-            usuario_id: "0qRBEeuugD5w2rKRhU8T",
+            usuario_id: props.route.params.usuario_id,
         }).then(() => {
             console.log("Dados registrados");
         }).catch((error) => {

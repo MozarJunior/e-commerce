@@ -26,7 +26,7 @@ import UpdateEndereco from './src/pages/RegisterEndereco/update';
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='MyTab'>
+      <Stack.Navigator initialRouteName='login'>
         <Stack.Screen 
           name="login" 
           component={Login}
