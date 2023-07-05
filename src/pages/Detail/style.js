@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
 
     container: {
         flexGrow: 1,
+        backgroundColor: '#fff',
     },
     image: {
         width: '100%',
