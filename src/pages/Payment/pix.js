@@ -42,6 +42,7 @@ export default function PaymentPix( props ) {
                     placeholder={preco}
                     // value={amount}
                     // onChangeText={setAmount}
+                    value={props.route.params.preco}
                     editable={false}
                     keyboardType="numeric"
                 />

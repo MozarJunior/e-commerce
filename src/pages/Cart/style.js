@@ -18,14 +18,16 @@ const styles = StyleSheet.create({
 
     homeHeaderText: {
         color: '#ffffff',
-        fontSize: 19,
-        fontWeight: 600,
+        fontSize: 22,
+        fontWeight: 'bold',
         paddingHorizontal: 20,
+        marginTop: 10,
     },
 
     homeBody: {
         minHeight: '90%',
         width: '100%',
+        // margin: 10,
     },
 
     homeBodyCate: {
@@ -35,7 +37,8 @@ const styles = StyleSheet.create({
 
     bodyProduct: {
         flex: 1,
-        width: '100%',
+        width: '95%',
+        marginTop: 10,
         // alignItems: 'center',
     },
 
@@ -100,8 +103,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#ff6b6b',
         height: '100%',
         width: '20%',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         justifyContent: 'center',
+        padding: 9,
     },
 
     cardPrecoProduto: {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, Text, View, TouchableOpacity } from 'react-native';
+import { SafeAreaView, Text, View, TouchableOpacity, FlatList, Pressable, Image } from 'react-native';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -7,13 +7,12 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from "./style";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, doc, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../components/config";
 import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
-import { FlatList } from "react-native-web";
 
-export default function Pedidos(){
+export default function Pedidos( props ){
     const isFocused = useIsFocused();
     const [produtos, setProdutos] = useState([]);
     const [pedidos, setPedidos] = useState([]);
@@ -22,32 +21,70 @@ export default function Pedidos(){
     const [user_id, setUser_id] = useState('')
 
     const generalPedidos = async () => {
-        await authUser();
-        const ped = []
-        getDocs(query(collection(db, 'pedidos'), where('usuario_id', '==', usuario_id))).then((docSnap) => {
-            docSnap.forEach((doc) => {
-                pedidos.push(doc.data().produto_id);
+        try {
+            await consultaUser();
+            const tabela = collection(db, 'pedidos');
+            const q = query(tabela, where('usuario_id', '==', usuario_id))
+            const snapShot = await getDocs(q);
+    
+            const prod = []
+            snapShot.forEach((doc) => {
+                prod.push({...doc.data(), id: doc.id});
             })
-        })
 
-        pedidos.forEach((docSnap => {
-            getDocs(collection(db, 'produto')).then(docSnapPro => {
-                if(docSnap == docSnapPro.id){
-                    produtos.push({...docSnapPro.data(), id: docSnapPro.id});
-                }
+            setPedidos(prod)
+            const tabelaPro = collection(db, 'produto');
+            const snapShotPro = await getDocs(tabelaPro);
+            const produto = []
+            prod.forEach((doc) => {
+                // console.log(doc);
+                snapShotPro.forEach((docPro) => {
+                    if(doc.produto_id === docPro.id){
+                        produto.push({...docPro.data(), id: docPro.id, status: doc.status, pagamento: doc.tipo_pagamento})
+                    }
+                })
             })
-        }))
 
-        // setPedidos(ped)
+            setProdutos(produto)
+        } catch (error) {
+            console.error("Erro ao consultar coleção pedidos: ", error)
+        }
+    }
+
+    const categoriaPedidos = async (categoria) => {
+        try {
+            await consultaUser();
+            const tabela = collection(db, 'pedidos');
+            const q = query(tabela, where('usuario_id', '==', usuario_id), where('status', '==', categoria))
+            const snapShot = await getDocs(q);
+    
+            const prod = []
+            snapShot.forEach((doc) => {
+                prod.push({...doc.data(), id: doc.id});
+            })
+
+            setPedidos(prod)
+            const tabelaPro = collection(db, 'produto');
+            const snapShotPro = await getDocs(tabelaPro);
+            const produto = []
+            prod.forEach((doc) => {
+                // console.log(doc);
+                snapShotPro.forEach((docPro) => {
+                    if(doc.produto_id === docPro.id){
+                        produto.push({...docPro.data(), id: docPro.id, status: doc.status, pagamento: doc.tipo_pagamento})
+                    }
+                })
+            })
+
+            setProdutos(produto)
+        } catch (error) {
+            console.error("Erro ao consultar coleção categoria: ", error)
+        }
     }
 
     useEffect (() => {
         generalPedidos();
     }, []);
-
-    // useEffect(() => {
-    //     generalProdutos();
-    // })
 
     useEffect(() => {
         if(isFocused){
@@ -55,23 +92,19 @@ export default function Pedidos(){
             generalPedidos();
         }
     }, [isFocused]);
-
+    
     useEffect(() => {
-        if(pedidos.length == 0){
+        if(produtos.length == 0){
             generalPedidos();
             console.log("pesquisando produtos")
         }else{
             console.log(pedidos);
         }
-    }, [])
-    // useEffect(() => {
-    //     if(produtos.length == 0){
-    //         generalProdutos();
-    //         console.log("pesquisando produtos")
-    //     }else{
-    //         console.log(produtos);
-    //     }
-    // }, [])
+    })
+
+    useEffect(() => {
+        console.log(produtos)
+    })
 
     const auth = async () => {
         const auth = getAuth();
@@ -83,7 +116,7 @@ export default function Pedidos(){
         }
     }
 
-    const authUser = async () => {
+    const consultaUser = async () => {
         try {
             await auth();
             const tabela = collection(db, 'usuario');
@@ -104,8 +137,8 @@ export default function Pedidos(){
 
     useEffect(() => {
         auth();
-        authUser();
-    }, [])
+        consultaUser();
+    });
 
     return (
         <SafeAreaView style={styles.container}>
@@ -116,7 +149,7 @@ export default function Pedidos(){
 
                 <View style={styles.sectionCategoria}>
                     <View style={styles.bodyCardIcon}>
-                        <TouchableOpacity style={styles.cardIcon}>
+                        <TouchableOpacity style={styles.cardIcon} onPress={() => generalPedidos()}>
                             <FontAwesome5 name="box" color={"#00aaff"} size={35}/>
                         </TouchableOpacity>
                     </View>
@@ -125,16 +158,16 @@ export default function Pedidos(){
                 
                 <View style={styles.sectionCategoria}>
                     <View style={styles.bodyCardIcon}>
-                        <TouchableOpacity style={styles.cardIcon} onPress={() => writeProdutos()}>
+                        <TouchableOpacity style={styles.cardIcon} onPress={() => categoriaPedidos("Aguardando Pagamento")}>
                             <FontAwesome name="dollar" color={"#00aaff"} size={35}/>
                         </TouchableOpacity>
                     </View>
-                    <Text style={styles.textCardIcon}>Aguardando pagamento</Text>
+                    <Text style={styles.textCardIcon}>Pagamento</Text>
                 </View>
                 
                 <View style={styles.sectionCategoria}>
                     <View style={styles.bodyCardIcon}>
-                        <TouchableOpacity style={styles.cardIcon} onPress={() => bookProdutos()}>
+                        <TouchableOpacity style={styles.cardIcon} onPress={() => categoriaPedidos("A caminho")}>
                             <MaterialCommunityIcons name="truck" color={"#00aaff"} size={40}/>
                         </TouchableOpacity>
                     </View>
@@ -142,7 +175,7 @@ export default function Pedidos(){
                 </View>
                 <View style={styles.sectionCategoria}>
                     <View style={styles.bodyCardIcon}>  
-                        <TouchableOpacity style={styles.cardIcon} onPress={() => accessoryProdutos()}>
+                        <TouchableOpacity style={styles.cardIcon} onPress={() => categoriaPedidos("Entregue")}>
                             <MaterialCommunityIcons name="truck-check" color={"#00aaff"} size={40}/>
                         </TouchableOpacity>
                     </View>
@@ -152,17 +185,17 @@ export default function Pedidos(){
             </View>
 
             <View style={styles.bodyProduct}>
-
-            </View>
-            {/* <View style={styles.bodyProduct}>
                 <FlatList
                     style={styles.bodyFlat}
                     showsVerticalScrollIndicator={false}
                     data={produtos}
                     renderItem={(item) => {
                         return (
-                            <Pressable style={styles.cardProduct} onPress={() => props.navigation.navigate('details', {
-                                produto_id: item.item.id
+                            <Pressable style={styles.cardProduct} onPress={() => props.navigation.navigate('paymentUpdate', {
+                                produto_id: item.item.id, 
+                                usuario_id: usuario_id,
+                                pagamento: item.item.pagamento,
+                                status: item.item.status,
                             })}>
                                 <Image style={styles.cardImage} source={{ uri: item.item.imagem }}/>
                                 <View style={styles.cardBody}>
@@ -173,17 +206,42 @@ export default function Pedidos(){
                                             <Text style={styles.cardQuantProduto}>Restam {item.item.quantidade} pcs</Text>
                                         </View>
                                     </View>
-                                    <TouchableOpacity style={styles.cardAction} onPress={() => deleteCart(item.item.id)}>
-                                        <AntDesign name="delete" color={'#fff'} size={20}/>
-                                    </TouchableOpacity>
+                                    { item.item.status == "Aguardando Pagamento"? (
+                                        <TouchableOpacity style={[styles.cardAction, {
+                                            padding: 12,
+                                        }]} onPress={() => {
+                                            item.item.pagamento == 'pix'? (props.navigation.navigate('paymentPix', {
+                                                usuario_id: usuario_id,
+                                                produto_id: item.item.id,
+                                                preco: item.item.preco
+                                            })) : (props.navigation.navigate('paymentCard', {
+                                                usuario_id: usuario_id,
+                                                produto_id: item.item.id
+                                            }))
+                                        }}>
+                                            <FontAwesome name="dollar" color={"#fff"} size={20}/>
+                                        </TouchableOpacity>
+                                    ) : item.item.status == "A caminho"?  (
+                                        <TouchableOpacity style={[styles.cardAction, {
+                                            backgroundColor: '#00aaff',
+                                        }]}>
+                                            <MaterialCommunityIcons name="truck" color={"#fff"} size={20}/>
+                                        </TouchableOpacity>
+                                    ) : (
+                                        <TouchableOpacity style={[styles.cardAction, {
+                                            backgroundColor: '#52c41a',
+                                        }]}>
+                                            <MaterialCommunityIcons name="truck-check" color={"#fff"} size={20}/>
+                                        </TouchableOpacity>
+                                    )}
+                                    
                                 </View>
                                 
                             </Pressable>
                         );
-                    } }
+                    }}
                 />
-            </View> */}
-
+            </View>
         </SafeAreaView>
     );
 }

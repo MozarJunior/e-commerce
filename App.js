@@ -22,6 +22,7 @@ import PaymentCard from './src/pages/Payment/card';
 import PaymentPix from './src/pages/Payment/pix';
 import RegisterUpdate from './src/pages/Register/update';
 import UpdateEndereco from './src/pages/RegisterEndereco/update';
+import PaymentUpdate from './src/pages/Payment/update';
 
 export default function App() {
   return (
@@ -140,6 +141,26 @@ export default function App() {
           options={{
             headerShown: true,
             title: 'Detalhes',
+            headerStyle: {
+              height: '30%',
+              width: '100%',
+              backgroundColor: '#00aaff',
+              border: '0.01px',
+              borderBottomEndRadius: 80,
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              color: '#fff',
+              fontWeight: 'bold',
+            },
+          }}
+        />
+        <Stack.Screen 
+          name="paymentUpdate" 
+          component={PaymentUpdate}
+          options={{
+            headerShown: true,
+            title: 'Meus Pedidos',
             headerStyle: {
               height: '30%',
               width: '100%',

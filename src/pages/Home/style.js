@@ -23,6 +23,14 @@ const styles = StyleSheet.create({
         fontWeight: 500,
         paddingHorizontal: 20,
     },
+
+    homeHeaderTitle: {
+        color: '#fff',
+        fontSize: 22,
+        fontWeight: 'bold', 
+        paddingHorizontal: 20,
+        marginTop: 10,
+    },
     //Fim do header
 
     //Inicio do Card de categorias
@@ -87,7 +95,7 @@ const styles = StyleSheet.create({
     
     bodyProduct: {
         flex: 1,
-        width: '100%',
+        width: '95%',
         // alignItems: 'center',
     },
 
@@ -101,7 +109,7 @@ const styles = StyleSheet.create({
         height: 110,
         width: '90%',
         marginVertical: 5,
-        backgroundColor: '#fff',
+        backgroundColor: '#fff', 
         borderRadius: 10,
         flexDirection: 'row',
     },
@@ -113,6 +121,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#fff',
         alignItems: 'baseline',
+        border: 1,
         borderRadius: 10,
     },
 

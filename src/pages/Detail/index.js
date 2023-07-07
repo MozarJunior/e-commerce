@@ -21,6 +21,7 @@ export default function Details( props ){
                 produto_id: produto_id
             }).then(() => {
                 console.log("Dados registrados");
+                alert("Produto adicionado ao Carrinho")
             }).catch((error) => {
                 console.log("algo deu errado");
             })

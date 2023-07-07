@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
         marginLeft: 'auto',
         marginRight: 'auto',
         borderRadius: 10,
-        backgroundColor: '#0000ff',
+        backgroundColor: '#00aaff',
     },
     textButton:{
         color: '#ffffff',

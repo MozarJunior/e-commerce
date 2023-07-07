@@ -14,7 +14,7 @@ export default function PaymentCard() {
 
     return (
         <KeyboardAvoidingView style={styles.container}>
-            <Text style={styles.title}>Página de Pagamento</Text>
+            <Text style={styles.title}>Pagamento por Cartão</Text>
 
             <View style={styles.form}>
                 <View style={styles.formGroup}>

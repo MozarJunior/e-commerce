@@ -7,10 +7,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import { db } from "../../../components/config";
 import { useIsFocused } from "@react-navigation/native";
+import Pedidos from "../Pedidos";
 
-export default function Payment( props ) {
+export default function PaymentUpdate( props ) {
     const isFocused = useIsFocused();
     const [produto, setProduto] = useState([]);
+    const [pedido, setPedido] = useState([]);
     const [endereco, setEndereco] = useState([]);
     const [endereco_id, setEndereco_id] = useState('')
     const [nome_produto, setNome_produto] = useState('');
@@ -18,11 +20,10 @@ export default function Payment( props ) {
     const [statePix, setStatePix] = useState(null);
     const [stateCard, setStateCard] = useState(null);
     const currentDateTime = new Date();
-    const Data = currentDateTime.toLocaleDateString();
-    const Hora = currentDateTime.toLocaleTimeString();
     const [produto_id, setProduto_id] = useState(props.route.params.produto_id)
     const [usuario_id, setUsuario_id] = useState(props.route.params.usuario_id)
-    const [pagamento, setPagamento] = useState('');
+    const [pagamento, setPagamento] = useState(props.route.params.pagamento);
+    const [status, setStatus] = useState(props.route.params.status);
 
     console.log(props.route.params.produto_id)
 
@@ -34,6 +35,25 @@ export default function Payment( props ) {
         }).catch(error => {
             console.error('produto não existe');
         });
+    }
+
+    const consultaPedido = async () => {
+        try {
+            await consultaProduto();
+            const tabela = collection(db, 'pedidos');
+            const q = query(tabela, where('usuario_id', '==', usuario_id), where('produto_id', '==', produto_id))
+            const snapShot = await getDocs(q);
+    
+            const prod = []
+            snapShot.forEach((doc) => {
+                prod.push({...doc.data(), id: doc.id});
+            })
+
+            setPedido(prod);
+            // console.log(prod)
+        } catch (error) {
+            console.error("Erro ao consultar coleção pedidos: ", error)
+        }
     }
 
     const consultaEndereco = async () => {
@@ -59,7 +79,7 @@ export default function Payment( props ) {
             console.log("Pesquisando Produto")
         }else{
             setNome_produto(produto.nome)
-            console.log(produto)
+            console.log("Produto encontrado")
         }
     });
 
@@ -76,38 +96,23 @@ export default function Payment( props ) {
             consultaEndereco();
             console.log("Consultando Endereco")
         }else{
-            console.log(endereco_id)
+            // console.log(endereco_id)
+            console.log('Endereco Encontrado')
         }
     })
 
-    const selectedPix = async () => {
-        setStatePix(true);
-        setPagamento("pix")
-        setStateCard(null)
-    }
-    const selectedCard = async () => {
-        setStateCard(true);
-        setPagamento("cartao")
-        setStatePix(null)
-    }
-
-    async function cadastrarPedido(){ 
-        addDoc(collection(db, 'pedidos'), {
-            data_pedido: currentDateTime,
-            endereco_id: endereco_id,
-            produto_id: produto_id,
-            status: "Aguardando Pagamento",
-            tipo_pagamento: pagamento,
-            usuario_id: usuario_id,
-        }).then(() => {
-            console.log('Cadastro realizado')
-        }).catch(erro => console.error("não foi possivel cadastrar", erro))
-    }
+    // useEffect(() => {
+    //     if(pedido.length == 0){
+    //         consultaPedido();
+    //         console.log('pesquisando pedido')
+    //     }else{
+    //         console.log('Pedido pesquisado')
+    //     }
+    // })
 
     return (
         <SafeAreaView style={styles.container}>
 
-            {/* <Text style={styles.title}>Produto</Text> */}
             <View style={[styles.secao, {
                 height: '25%',
             }]}>
@@ -122,40 +127,16 @@ export default function Payment( props ) {
                             <Text style={styles.cardPrecoProduto}>{produto.preco} R$</Text>
                             <Text style={styles.cardQuantProduto}>Restam {produto.quantidade} pcs</Text>
                         </View>
+
                     </View>
                 </View>
             </View>
-            {/* <View style={styles.cardProduct}>
-                <Image style={styles.cardImage} source={{ uri: produto.imagem}}/>
-                <View style={styles.cardBody}>
-                    <Text style={styles.cardNameProduto}>{ nome_produto.length > 30 ? nome_produto.substring(0, 30).toUpperCase() + '...' : nome_produto.toUpperCase() }</Text> 
-                    <View style={styles.sectionPreco}>
-                        <Text style={styles.cardPrecoProduto}>{produto.preco} R$</Text>
-                        <Text style={styles.cardQuantProduto}>Restam {produto.quantidade} pcs</Text>
-                    </View>
-                </View>
-            </View> */}
 
             <View style={[styles.secao, {
                 height: '35%',
             }]}>
                 <View style={styles.header}>
                     <Text style={styles.HeaderText}>Endereço de Entrega</Text>
-                    {endereco_ex == false? (
-                        <TouchableOpacity onPress={() => { props.navigation.navigate('registerEndereco', {
-                            usuario_id: usuario_id
-                        })}}>
-                            <Ionicons name="add-circle-outline" size={35} color={'#00aaff'}/> 
-                        </TouchableOpacity>
-                        ): 
-                        (
-                            <TouchableOpacity onPress={() => { props.navigation.navigate('updateEndereco', {
-                                usuario_id: usuario_id
-                            })}}>
-                                <Feather name="edit" size={30} color={'#00aaff'}/>
-                            </TouchableOpacity>
-                        )}
-                    
                 </View>
                 <View style={styles.Body}>
                     {endereco_ex == false? (
@@ -170,38 +151,72 @@ export default function Payment( props ) {
                     )}
                 </View>
             </View>
-            
-            <View style={[styles.secao, {
-                height: '30%',
-            }]}>
-                <View style={styles.header}>
-                    <Text style={styles.HeaderText}>Selecione o Metodo de Pagamento</Text>
-                </View>
-                <View style={styles.sectionPagamento}>
-                    <TouchableOpacity  style={[styles.button, {
-                        shadowColor: statePix == true? '#00aaff': '#000',
-                        elevation: statePix == true?  10: 3
-                    }]} onPress={ () => selectedPix()}>
-                        <Image source={require('../../assets/img/logo_pix.png')} style={styles.image} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.button, {
-                        shadowColor: stateCard == true? '#00aaff': '#000',
-                        elevation: stateCard == true?  10: 3
-                    }]} onPress={ () => selectedCard()}>
-                        <Image source={require('../../assets/img/logo_cartao.png')} style={styles.image} />
-                    </TouchableOpacity>
-                </View>
-
-            </View>
-            
-            <View style={styles.sectionBtn}>
-                <TouchableOpacity onPress={() => cadastrarPedido()} style={[styles.submitBtn, {
-                    width: '90%',
+            { status == "Aguardando Pagamento"? (
+                <View style={[styles.secao, {
+                    height: '40%',
                 }]}>
-                    <Text style={styles.submitBtnText}>Finalizar Pedido</Text>
-                </TouchableOpacity>
-            </View>
-            
+                    <View style={styles.header}>
+                        <Text style={styles.HeaderText}>Efetuar Pagamento</Text>
+                    </View>
+                    <View style={styles.sectionPagamento}>
+                        { pagamento == 'pix'? (
+                            <TouchableOpacity  style={[styles.button, {
+                                shadowColor: '#00aaff',
+                                elevation: 10
+                            }]} onPress={ () => props.navigation.navigate('paymentPix', {
+                                usuario_id: usuario_id,
+                                produto_id: produto_id,
+                                preco: produto.preco
+                            })}>
+                                <Image source={require('../../assets/img/logo_pix.png')} style={styles.image} />
+                            </TouchableOpacity>
+                        ) : (
+                            <TouchableOpacity style={[styles.button, {
+                                shadowColor: '#00aaff',
+                                elevation: 10
+                            }]} onPress={ () => props.navigation.navigate('paymentCard', {
+                                usuario_id: usuario_id,
+                                produto_id: produto_id,
+                                preco: produto.preco
+                            })}>
+                                <Image source={require('../../assets/img/logo_cartao.png')} style={styles.image} />
+                            </TouchableOpacity>
+                        ) }
+                    </View>
+                    
+                </View>
+            ) : (
+                <View style={[styles.secao, {
+                    height: '40%',
+                }]}>
+                    <View style={styles.header}>
+                        <Text style={styles.HeaderText}>Pagamento Efetuado</Text>
+                    </View>
+                    <View style={[styles.sectionPagamento, {
+                        height: '50%',
+                    }]}>
+                        { pagamento == 'pix'? (
+                            <TouchableOpacity  style={[styles.button, {
+                                shadowColor: '#00aaff',
+                                elevation: 10
+                            }]} >
+                                <Image source={require('../../assets/img/logo_pix.png')} style={styles.image} />
+                            </TouchableOpacity>
+                        ) : (
+                            <TouchableOpacity style={[styles.button, {
+                                shadowColor: '#00aaff',
+                                elevation: 10
+                            }]} >
+                                <Image source={require('../../assets/img/logo_cartao.png')} style={styles.image} />
+                            </TouchableOpacity>
+                        ) }
+                    </View>
+                    <View style={styles.header}>
+                        <Text style={styles.HeaderText}>Status: Produto {status}</Text>
+                    </View>
+
+                </View>
+            )}
         </SafeAreaView>
     );
 }

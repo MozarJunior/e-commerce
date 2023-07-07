@@ -36,8 +36,8 @@ const styles = StyleSheet.create({
     },
 
     headerTopText: {
-        fontSize: 18,
-        fontWeight: 600,
+        fontSize: 22,
+        fontWeight: 'bold',
         color: '#fff',
     },
 

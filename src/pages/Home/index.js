@@ -121,7 +121,8 @@ export default function Home( {navigation} ){
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.homeHeader}>
-                <Text style={styles.homeHeaderText} >Olá, { usuario.nome }</Text>
+                <Text style={styles.homeHeaderTitle}>Página Inicial</Text>
+                <Text style={styles.homeHeaderText} >Bem vindo, { usuario.nome }</Text>
             </View >
 
             <View style={styles.homeCard}>
@@ -180,7 +181,7 @@ export default function Home( {navigation} ){
                                 <Text style={styles.cardNameProduto}>{ item.item.nome.length > 30 ? item.item.nome.substring(0, 30).toUpperCase() + '...' : item.item.nome.toUpperCase() }</Text>
                                 <View style={styles.sectionPreco}>
                                     <Text style={styles.cardPrecoProduto}>{item.item.preco} R$</Text>
-                                    <Text style={styles.cardQuantProduto}>Restam {item.item.quantidade} pcs</Text>
+                                    <Text style={styles.cardQuantProduto}>Restam {item.item.quantidade} peças</Text>
                                 </View>
                             </View>
                         </Pressable>

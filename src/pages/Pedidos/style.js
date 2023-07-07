@@ -44,9 +44,10 @@ const styles = StyleSheet.create({
 
     homeHeaderText: {
         color: '#ffffff',
-        fontSize: 19,
-        fontWeight: 600,
+        fontSize: 22,
+        fontWeight: 'bold',
         paddingHorizontal: 20,
+        marginTop: 10,
     },
 
     homeBody: {
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
 
     bodyProduct: {
         flex: 1,
-        width: '100%',
+        width: '95%',
         alignItems: 'center',
     },
 
@@ -227,11 +228,13 @@ const styles = StyleSheet.create({
     },  
 
     cardAction: {
-        backgroundColor: '#ff6b6b',
+        // backgroundColor: '#ff6b6b',
+        backgroundColor: '#ffc107',
         height: '100%',
         width: '20%',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         justifyContent: 'center',
+        padding: 9,
     },
 
     cardPrecoProduto: {

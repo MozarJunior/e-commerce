@@ -39,8 +39,8 @@ export default function Login( {navigation} ){
                     title="Logo Marca" 
                     source={logo}
                 />
-                <Text style={styles.textHigh}>Welcome to Back</Text>
-                <Text style={styles.textLow}>Please, sign in to continue</Text>
+                <Text style={styles.textHigh}>Bem Vindo</Text>
+                <Text style={styles.textLow}>Por favor, faça login para continuar!</Text>
             </View>
 
 
@@ -70,7 +70,7 @@ export default function Login( {navigation} ){
                         { errors.email && <Text style={styles.messageError}>{ errors.email?.message }</Text> }
                     </View>
                     <View style={styles.formInput}>
-                        <Text style={styles.textInput}>Password</Text>
+                        <Text style={styles.textInput}>Senha</Text>
                         <Controller
                             control={control}
                             name="password"
@@ -90,11 +90,11 @@ export default function Login( {navigation} ){
                         />
                         { errors.password && <Text style={styles.messageError}>{ errors.password?.message }</Text> }
                     </View>
-                    <Text style={styles.textForgot} >Forgot Password?</Text>
+                    <Text style={styles.textForgot} >Esqueceu sua senha?</Text>
                     <TouchableOpacity style={styles.button} onPress={handleSubmit(Login)}>
                         <Text style={styles.textButton} >Entrar</Text>
                     </TouchableOpacity>
-                    <Text style={styles.textRegister}>Don´t have an account? <Text style={styles.textRegisterLink} onPress={() => navigation.navigate('register')}>Sing up</Text></Text>
+                    <Text style={styles.textRegister}>Não tem uma conta? <Text style={styles.textRegisterLink} onPress={() => navigation.navigate('register')}>Sing up</Text></Text>
                 </View>
             </View>
         </KeyboardAvoidingView>
